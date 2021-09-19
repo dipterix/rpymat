@@ -37,7 +37,7 @@ mat_pyver <- function(mat_ver){
   re <- version_list[[mat_ver]]
   if(!length(re)){
     # read from Github
-    version_file <- "http://github.com/dipterix/rpymat"
+    version_file <- "https://raw.githubusercontent.com/dipterix/rpymat/main/inst/matlab-python-versions.txt"
     s <- readLines(version_file)
     s <- s[s != ""]
     s <- strsplit(s, "[ ]+")
@@ -47,6 +47,7 @@ mat_pyver <- function(mat_ver){
     }), names = names)
     re <- version_list[[mat_ver]]
   }
+  re
 }
 
 #' @export
@@ -86,7 +87,13 @@ configure_matlab <- function(matlab, python_ver = 'auto'){
 
           if(!ver %in% compatible_ver) {
             python_ver <- compatible_ver[[length(compatible_ver)]]
-            message(sprintf("Current python version is `%s`, but matlab engine requires python version to be one of the followings: %s. Trying to install python %s", ver, paste(compatible_ver, collapse = ', '), python_ver))
+            message(sprintf("Current python version is `%s`, but matlab engine requires python version to be one of the followings: %s. Trying to install python %s. To proceed, your python version will change in the virtual environment (it is safe and your system python won't change).", ver, paste(compatible_ver, collapse = ', '), python_ver))
+            if(interactive()){
+              if(!isTRUE(utils::askYesNo("Continue? "))){
+                stop("User abort", call. = FALSE)
+              }
+            }
+
           }
         }
 
