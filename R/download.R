@@ -7,7 +7,9 @@ miniconda_installer_url <- function (version = "3") {
   if( isTRUE(rver$arch == "aarch64") ){
     arch <- "armv71"
     if( startsWith(rver$os, 'darwin') ){
-      options("reticulate.miniconda.url" = "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-arm64.sh")
+      options("reticulate.miniconda.url" =
+                "https://github.com/conda-forge/miniforge/releases/download/4.9.2-7/Mambaforge-4.9.2-7-MacOSX-arm64.sh")
+                #"https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-arm64.sh")
     }
   }
   return()

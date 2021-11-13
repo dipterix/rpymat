@@ -1,3 +1,29 @@
+#' @title Run 'Python' script
+#' @description A wrapper of \code{\link[reticulate]{py_run_file}},
+#' but with \code{rpymat} enabled
+#' @param x script path
+#' @param work_dir working directory of the script
+#' @param local,convert passed to \code{\link[reticulate]{py_run_file}}
+#' @return The values returned by \code{\link[reticulate]{py_run_file}}
+#' @examples
+#'
+#' \dontrun{
+#'
+#' # Please configure conda environment first
+#'
+#' x <- tempfile()
+#' writeLines(c(
+#'   "import re",
+#'   "zipcode = re.findall(r'[0-9]{5,6}', r.address)"
+#' ), con = x)
+#'
+#' address <- '2341 Main St., 72381'
+#' rpymat::run_script(x)
+#'
+#' py$zipcode
+#'
+#' }
+#'
 #' @export
 run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE){
 
@@ -9,6 +35,7 @@ run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE){
   }
 
   x <- normalizePath(x, mustWork = TRUE)
-  rpymat::ensure_rpymat()
+  ensure_rpymat()
   reticulate::py_run_file(file = x, local = local, convert = convert)
 }
+
