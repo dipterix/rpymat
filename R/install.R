@@ -14,7 +14,10 @@
 #' This parameter should be true if your functions depend on
 #' \code{remove_conda} (see 'CRAN Repository Policy'). This argument might
 #' be removed and force to be interactive in the future.
-#' @param fun,... 'Matlab' function name and parameters (experimental)
+#' @param fun 'Matlab' function name, character (experimental)
+#' @param ... for \code{add_packages}, these are additional parameters
+#' passing to \code{\link[reticulate]{conda_install}}; for
+#' \code{call_matlab}, \code{...} are the parameters passing to \code{fun}
 #' @param .options 'Matlab' compiler options
 #' @param .debug whether to enable debug mode
 #' @return None
@@ -73,10 +76,13 @@
 #' configure_conda(python_ver = '3.9')
 #'
 #'
-#' # Add packages h5py, pandas
+#' # Add packages h5py, pandas, jupyter
 #'
 #' add_packages(c('h5py', 'pandas', 'jupyter'))
 #'
+#' # Add pip packages
+#'
+#' add_packages("itk", pip = TRUE)
 #'
 #' # Initialize the isolated environment
 #'
@@ -346,17 +352,18 @@ remove_conda <- function(ask = TRUE){
 
 #' @rdname conda-env
 #' @export
-add_packages <- function(packages = NULL, python_ver = 'auto') {
+add_packages <- function(packages = NULL, python_ver = 'auto', ...) {
   set_conda(temporary = TRUE)
 
 
   # install packages
-  packages <- unique(c('numpy', 'h5py', 'scipy', 'matplotlib', "ipython", packages))
+  packages <- unique(packages)
+  if(!length(packages)){ return() }
   if( isTRUE(python_ver == "auto") ){
-    reticulate::conda_install(env_path(), packages = packages)
+    reticulate::conda_install(env_path(), packages = packages, ...)
   } else {
     reticulate::conda_install(env_path(), packages = packages,
-                              python_version = python_ver)
+                              python_version = python_ver, ...)
   }
 
 }

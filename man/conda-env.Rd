@@ -36,7 +36,7 @@ configure_conda(
 
 remove_conda(ask = TRUE)
 
-add_packages(packages = NULL, python_ver = "auto")
+add_packages(packages = NULL, python_ver = "auto", ...)
 
 ensure_rpymat()
 
@@ -68,7 +68,11 @@ This parameter should be true if your functions depend on
 \code{remove_conda} (see 'CRAN Repository Policy'). This argument might
 be removed and force to be interactive in the future.}
 
-\item{fun, ...}{'Matlab' function name and parameters (experimental)}
+\item{...}{for \code{add_packages}, these are additional parameters
+passing to \code{\link[reticulate]{conda_install}}; for
+\code{call_matlab}, \code{...} are the parameters passing to \code{fun}}
+
+\item{fun}{'Matlab' function name, character (experimental)}
 
 \item{.options}{'Matlab' compiler options}
 
@@ -142,10 +146,13 @@ function will make sure correct compiler is linked to your current
 configure_conda(python_ver = '3.9')
 
 
-# Add packages h5py, pandas
+# Add packages h5py, pandas, jupyter
 
 add_packages(c('h5py', 'pandas', 'jupyter'))
 
+# Add pip packages
+
+add_packages("itk", pip = TRUE)
 
 # Initialize the isolated environment
 
