@@ -1,5 +1,5 @@
 
-# Easy to Configure A Isolated Python Environment
+# Isolated `Miniconda`, `Python`, and `Matlab` (experimental) Environment
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/dipterix/rpymat/workflows/R-CMD-check/badge.svg)](https://github.com/dipterix/rpymat/actions)
@@ -50,7 +50,7 @@ the results.
 
 
 
-## Uninstallation
+## Uninstall
 
 The following command will erase the environment completely.
 

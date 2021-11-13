@@ -4,12 +4,14 @@
 #' 'Miniconda' environment.
 #' @param matlab 'Matlab' path to add to the configuration path;
 #' see 'Details'
-#' @param python_ver 'Python' version to use; see 'Configuration'
-#' @param packages additional 'Python' or 'conda' packages to install
-#' @param update whether to update 'conda'; default is false
+#' @param python_ver \code{python} version to use; see 'Configuration'
+#' @param packages additional \code{python} or \code{conda} packages to install
+#' @param update whether to update \code{conda}; default is false
 #' @param force whether to force install the 'Miniconda' even a previous
 #' version exists; default is false. Setting \code{false=TRUE} rarely
 #' works. Please see 'Configuration'.
+#' @param env_name alternative environment name to use; default is
+#' \code{"rpymat-conda-env"}
 #' @param ask whether to ask for user's agreement to remove the repository.
 #' This parameter should be true if your functions depend on
 #' \code{remove_conda} (see 'CRAN Repository Policy'). This argument might
@@ -22,32 +24,32 @@
 #' @param .debug whether to enable debug mode
 #' @return None
 #' @section Background & Objectives:
-#' Package 'reticulate' provides sophisticated tool-sets that
-#' allow us to call 'Python' functions within \code{R}. However, the
-#' installation of 'Miniconda' and 'Python' can be tricky on many
+#' Package \code{reticulate} provides sophisticated tool-sets that
+#' allow us to call \code{python} functions within \code{R}. However, the
+#' installation of 'Miniconda' and \code{python} can be tricky on many
 #' platforms, for example, the 'M1' chip, or some other 'ARM' machines.
 #' The package \code{rpymat} provides easier approach to configure on these
 #' machines with totally isolated environments. Any modifications to this
 #' environment will not affect your other set ups.
 #'
-#' Since 2014, 'Matlab' has introduced its official compiler for 'Python'.
+#' Since 2014, 'Matlab' has introduced its official compiler for \code{python}.
 #' The package \code{rpymat} provides a simple approach to link the
 #' compiler, provided that you have proper versions of 'Matlab' installed.
 #' \href{https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf}{Here} is a list of
 #' 'Matlab' versions with official compilers and their corresponding
-#' 'Python' versions.
+#' \code{python} versions.
 #'
 #' @section Configuration:
-#' If 'Matlan' compiler is not to be installed, In most of the cases,
+#' If 'Matlab' compiler is not to be installed, In most of the cases,
 #' function \code{configure_conda} with default arguments automatically
-#' downloads the latest 'Miniconda' and configures the latest 'Python'.
+#' downloads the latest 'Miniconda' and configures the latest \code{python}.
 #' If any other versions of 'Miniconda' is ought to be installed,
 #' please set options \code{"reticulate.miniconda.url"} to change the
 #' source location.
 #'
 #' On Apple's 'M1' machine, there is no official native 'Miniconda' as of
-#' 2021-11-01. The default 'conda' will be the \href{https://github.com/conda-forge/miniforge/releases/tag/4.9.2-7}{'Mambaforge'} compiled by
-#' the 'conda-forge' team. This version will subject to change in the near
+#' 2021-11-01. The default \code{conda} will be the \href{https://github.com/conda-forge/miniforge/releases/tag/4.9.2-7}{'Mambaforge'} compiled by
+#' the \code{'conda-forge'} team. This version will subject to change in the near
 #' future once the official support is released. Sometimes the 'Mambaforge'
 #' is too advanced and not all the dependencies are properly compiled.
 #' In such cases, you will receive errors like "Package 'xxx' conflicts
@@ -61,14 +63,14 @@
 #' the 'Intel' chips.
 #'
 #' @section Initialization:
-#' Once 'conda' and 'Python' environment has been installed, make sure
-#' you run \code{ensure_rpymat()} before running any 'Python' code. This
+#' Once \code{conda} and \code{python} environment has been installed, make sure
+#' you run \code{ensure_rpymat()} before running any \code{python} code. This
 #' function will make sure correct compiler is linked to your current
 #' \code{R} session.
 #'
 #' @examples
 #'
-#' # The script will interactively install 'conda' to `R_user_dir`
+#' # The script will interactively install \code{conda} to `R_user_dir`
 #' \dontrun{
 #'
 #' # Install conda and python 3.9
@@ -99,9 +101,21 @@ NULL
 
 #' @rdname conda-env
 #' @export
-CONDAENV_NAME <- "rpymat-conda-env"
-
-VIRTUALENV_NAME <- "rpymat-virtual-env"
+CONDAENV_NAME <- local({
+  name <- "rpymat-conda-env"
+  function(env_name){
+    if(!missing(env_name)){
+      stopifnot(length(env_name) == 1 && is.character(env_name))
+      if(env_name == ""){
+        name <<- "rpymat-conda-env"
+      } else {
+        name <<- sprintf("rpymat-conda-env-%s", env_name)
+      }
+      message("Environment switched to: ", name)
+    }
+    name
+  }
+})
 
 install_root <- function(){
   if(Sys.info()["sysname"] == "Darwin"){
@@ -123,7 +137,7 @@ conda_path <- function(){
 #' @rdname conda-env
 #' @export
 env_path <- function(){
-  return( file.path(install_root(), CONDAENV_NAME) )
+  return( file.path(install_root(), CONDAENV_NAME()) )
 }
 
 set_conda <- function(temporary = TRUE){
@@ -273,7 +287,7 @@ configure_conda <- function(python_ver = "auto",
                             matlab = NULL,
                             update = FALSE, force = FALSE){
 
-  error = TRUE
+  error <- TRUE
   set_conda(temporary = TRUE)
 
   # TODO: check if conda bin exists
@@ -307,7 +321,7 @@ configure_conda <- function(python_ver = "auto",
   }
 
   # create virtual env
-  if(force || update || !CONDAENV_NAME %in% reticulate::conda_list()[['name']]){
+  if(force || update || !CONDAENV_NAME() %in% reticulate::conda_list()[['name']]){
     if( isTRUE(python_ver == "auto") ){
       reticulate::conda_create(env_path())
     } else {
@@ -373,7 +387,7 @@ add_packages <- function(packages = NULL, python_ver = 'auto', ...) {
 ensure_rpymat <- function(){
   set_conda(temporary = FALSE)
   Sys.setenv("RETICULATE_PYTHON" = normalizePath(file.path(env_path(), 'bin', "python")))
-  reticulate::use_condaenv(CONDAENV_NAME, required = TRUE)
+  reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
   reticulate::py_config()
 }
 
@@ -381,7 +395,7 @@ ensure_rpymat <- function(){
 #' @export
 matlab_engine <- function(){
   set_conda(temporary = FALSE)
-  reticulate::use_condaenv(CONDAENV_NAME, required = TRUE, conda = file.path(conda_path(), "bin", "conda"))
+  reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE, conda = file.path(conda_path(), "bin", "conda"))
 
   if(reticulate::py_module_available("matlab.engine")){
     matlab <- reticulate::import('matlab.engine')
