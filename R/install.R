@@ -136,6 +136,12 @@ conda_path <- function(){
 
 #' @rdname conda-env
 #' @export
+conda_bin <- function(){
+  file.path(install_root(), "miniconda", "condabin", "conda")
+}
+
+#' @rdname conda-env
+#' @export
 env_path <- function(){
   return( file.path(install_root(), CONDAENV_NAME()) )
 }

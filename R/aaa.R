@@ -1,3 +1,26 @@
+get_os <- function () {
+  if ("windows" %in% stringr::str_to_lower(.Platform$OS.type)) {
+    return("windows")
+  }
+  os <- stringr::str_to_lower(R.version$os)
+  if (stringr::str_detect(os, "^darwin")) {
+    return("darwin")
+  }
+  if (stringr::str_detect(os, "^linux")) {
+    return("linux")
+  }
+  if (stringr::str_detect(os, "^solaris")) {
+    return("solaris")
+  }
+  if (stringr::str_detect(os, "^win")) {
+    return("windows")
+  }
+  return("unknown")
+}
+
+is_arm <- function(){
+  grepl("arch64", R.version$arch)
+}
 
 R_user_dir <- function (package, which = c("data", "config", "cache")) {
   stopifnot(is.character(package), length(package) == 1L)
