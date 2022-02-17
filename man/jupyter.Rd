@@ -7,6 +7,7 @@
 \alias{jupyter_register_R}
 \alias{jupyter_options}
 \alias{jupyter_launch}
+\alias{jupyter_server_list}
 \title{Install, register, launch 'Jupyter' notebook to the virtual environment}
 \usage{
 add_jupyter(..., register_R = TRUE)
@@ -40,6 +41,8 @@ jupyter_launch(
   ...,
   dry_run = FALSE
 )
+
+jupyter_server_list()
 }
 \arguments{
 \item{...}{for \code{add_jupyter}, these are additional parameters passed to
@@ -66,6 +69,8 @@ used to debug the code}
 \value{
 \code{jupyter_bin} returns the 'Jupyter' notebook binary path;
 \code{jupyter_options} returns the 'Jupyter' configuration in strings;
+\code{jupyter_server_list} returns a table of existing local 'Jupyter'
+server hosts, ports, and tokens;
 other functions return nothing.
 }
 \description{

@@ -11,6 +11,7 @@ Description: Aims to create a single isolated 'Miniconda'
     more stable behaviors, especially on 'ARM' machines.
 License: Apache License (>= 2)
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 RoxygenNote: 7.1.2
 URL: https://github.com/dipterix/rpymat
