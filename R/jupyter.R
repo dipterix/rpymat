@@ -233,3 +233,39 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
   # run_command(sprintf("%s --config-dir", shQuote(jupyter_bin(), type = "cmd")), workdir = workdir, env = sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd")), )
 }
 
+
+#' @rdname jupyter
+#' @export
+jupyter_server_list <- function(){
+  quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
+  command <- c(
+    "echo off",
+    sprintf("%s server list", quoted_cmd)
+  )
+
+  res <- run_command(command, wait = TRUE, stdout = TRUE, stderr = TRUE)
+  res <- res[grepl("http[s]{0,1}://.*:[0-9]{2,5}/jupyter/", res)]
+  res <- strsplit(res, "/jupyter/")
+  res <- lapply(res, function(x){
+    token <- ""
+    if(length(x) > 1){
+      token <- strsplit(x[[2]], " ")[[1]][[1]]
+      if(startsWith(token, "?token=")){
+        token <- sub(pattern = "^\\?token=", "", token)
+      }
+    }
+    x <- sub("http[s]{0,1}://", "", x[[1]])
+    x <- strsplit(x, "[://]")[[1]]
+    c(x[1:2], token)
+  })
+
+  res <- do.call('rbind', res[sapply(res, length) == 3])
+  res <- as.data.frame(res)
+  names(res) <- c("host", "port", "token")
+  res$port <- as.integer(res$port)
+  res
+}
+
+
+
+
