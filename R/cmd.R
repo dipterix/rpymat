@@ -133,7 +133,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
       s_conda <- glue::glue(
         'set PATH="{ conda_path2 };%PATH%"',
         "",
-        '"call { bin_path2 }" activate "{ env_path2 }"',
+        'call "{ bin_path2 }" activate "{ env_path2 }"',
         .sep = "\n"
       )
     }
