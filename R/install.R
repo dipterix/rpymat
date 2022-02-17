@@ -388,6 +388,7 @@ add_packages <- function(packages = NULL, python_ver = 'auto', ...) {
 
 }
 
+
 #' @rdname conda-env
 #' @export
 ensure_rpymat <- function(){

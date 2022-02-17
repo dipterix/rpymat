@@ -1,21 +1,21 @@
-get_os <- function () {
-  if ("windows" %in% stringr::str_to_lower(.Platform$OS.type)) {
+get_os <- function(){
+  if("windows" %in% tolower(.Platform$OS.type)){
     return("windows")
   }
-  os <- stringr::str_to_lower(R.version$os)
-  if (stringr::str_detect(os, "^darwin")) {
-    return("darwin")
+  os <- tolower(R.version$os)
+  if(startsWith(os, "darwin")){
+    return('darwin')
   }
-  if (stringr::str_detect(os, "^linux")) {
-    return("linux")
+  if(startsWith(os, "linux")){
+    return('linux')
   }
-  if (stringr::str_detect(os, "^solaris")) {
-    return("solaris")
+  if(startsWith(os, "solaris")){
+    return('solaris')
   }
-  if (stringr::str_detect(os, "^win")) {
-    return("windows")
+  if(startsWith(os, "win")){
+    return('windows')
   }
-  return("unknown")
+  return('unknown')
 }
 
 is_arm <- function(){
@@ -74,3 +74,7 @@ setwd2 <- function(d, quiet = FALSE){
   setwd(d)
 }
 
+rand_string <- function (length = 50) {
+  paste(sample(c(letters, LETTERS, 0:9), length, replace = TRUE),
+        collapse = "")
+}

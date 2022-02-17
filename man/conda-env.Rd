@@ -4,6 +4,7 @@
 \alias{conda-env}
 \alias{CONDAENV_NAME}
 \alias{conda_path}
+\alias{conda_bin}
 \alias{env_path}
 \alias{configure_matlab}
 \alias{configure_conda}
@@ -17,6 +18,8 @@
 CONDAENV_NAME(env_name)
 
 conda_path()
+
+conda_bin()
 
 env_path()
 

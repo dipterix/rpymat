@@ -3,4 +3,5 @@
 ^LICENSE\.md$
 ^\.github$
 ^cran-comments\.md$
+^adhoc$
 ^CRAN-RELEASE$
