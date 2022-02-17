@@ -123,7 +123,12 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
         bin_path <- bin_path[[1]]
       }
       bin_path2 <- normalizePath(bin_path, winslash = "\\", mustWork = FALSE)
-      conda_path2 <- normalizePath(file.path(conda$conda_path, "bin"), winslash = "\\", mustWork = FALSE)
+      if(get_os() == "windows"){
+        conda_path2 <- normalizePath(file.path(conda$conda_path, "Scripts"), winslash = "\\", mustWork = FALSE)
+      } else {
+        conda_path2 <- normalizePath(file.path(conda$conda_path, "bin"), winslash = "\\", mustWork = FALSE)
+      }
+
       env_path2 <- normalizePath(conda$conda_path, winslash = "\\", mustWork = FALSE)
       s_conda <- glue::glue(
         'set PATH="{ conda_path2 };%PATH%"',

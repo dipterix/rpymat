@@ -53,7 +53,20 @@ add_jupyter <- function(..., register_R = TRUE){
 #' @rdname jupyter
 #' @export
 jupyter_bin <- function(){
-  normalizePath(file.path(env_path(), "bin", "jupyter"), mustWork = FALSE)
+  f <- c(
+    file.path(env_path(), "bin", "jupyter"),
+    file.path(env_path(), "Scripts", "jupyter.exe")
+  )
+  if(any(file.exists(f))){
+    f <- f[[file.exists(f)]][[1]]
+  } else {
+    if(get_os() == "windows"){
+      f <- f[[2]]
+    } else {
+      f <- f[[1]]
+    }
+  }
+  normalizePath(f, mustWork = FALSE, winslash = "\\")
 }
 
 #' @rdname jupyter
