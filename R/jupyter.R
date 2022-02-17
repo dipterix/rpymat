@@ -131,6 +131,9 @@ jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rpr
 
 #' @rdname jupyter
 jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_browser = FALSE, token = rand_string()){
+  root_dir <- normalizePath(root_dir, winslash = "\\", mustWork = TRUE)
+  root_dir <- gsub('\\\\', '\\\\\\\\', root_dir)
+
   glue::glue(
     .sep = "\n",
     # 'c.GatewayClient.url = "http://{host}:{port+1}"',
@@ -142,7 +145,7 @@ jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_brow
     'c.NotebookApp.base_url = "/jupyter/"',
     'c.NotebookApp.token = "{token}"',
     'c.NotebookApp.password = ""',
-    'c.NotebookApp.notebook_dir = "{normalizePath(root_dir, winslash = "/", mustWork = TRUE)}"',
+    'c.NotebookApp.notebook_dir = "{root_dir}"',
 
     'c.NotebookApp.tornado_settings = {{',
     '  \'headers\' : {{',
