@@ -229,7 +229,7 @@ detect_shell <- function(suggest = NULL){
 
 cmd_run_script <- function(shell, script, ...){
   if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")){
-    system2(command = Sys.which(shell), args = tmpfile, ...)
+    system2(command = Sys.which(shell), args = script, ...)
   } else if(shell %in% "cmd"){
     if(!endsWith(tolower(script), ".bat")){
       tmpfile <- tempfile(fileext = ".bat")
@@ -256,7 +256,7 @@ cmd_run_script <- function(shell, script, ...){
 run_command <- function(command, shell = detect_shell(),
                         use_glue = TRUE, enable_conda = TRUE,
                         stdout = "", stderr = "", stdin = "", input = NULL,
-                        env = character(), wait = TRUE, timeout = 0, ...,
+                        env_list = list(), wait = TRUE, timeout = 0, ...,
                         workdir = getwd(), dry_run = FALSE, print_cmd = dry_run,
                         glue_env = parent.frame()){
 
@@ -268,6 +268,14 @@ run_command <- function(command, shell = detect_shell(),
   }
   command <- cmd_set_workdir(command, workdir)
 
+  if(length(env_list)){
+    for(key in names(env_list)){
+      if(key != ""){
+        value <- env_list[[key]]
+      }
+      cmd_set_env(command = command, key = key, value = value, quote = FALSE)
+    }
+  }
 
 
 
@@ -299,7 +307,7 @@ run_command <- function(command, shell = detect_shell(),
 
   cmd_run_script(shell = shell, script = tmpfile,
              stdout = stdout, stderr = stderr, stdin = stdin, input = input,
-             env = env, wait = wait, timeout = timeout, ...)
+             wait = wait, timeout = timeout, ...)
   # system2(command = Sys.which(shell), args = tmpfile,
   #         stdout = stdout, stderr = stderr, stdin = stdin, input = input,
   #         env = env, wait = wait, timeout = timeout, ...)

@@ -6,7 +6,7 @@
 ip <- '127.0.0.1'
 token <- raveio::raveio_getopt(key = "jupyter_token", default = "")
 url <- sprintf("http://%s:8888/jupyter/?token=%s", ip, token)
-rpymat::jupyter_launch(open_browser = FALSE, host = ip, token = token)
+rpymat::jupyter_launch(open_browser = F, host = ip, token = token, async = F)
 
 # Launch shiny, embed jupyter in shiny
 library(shiny)

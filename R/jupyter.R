@@ -74,9 +74,14 @@ jupyter_bin <- function(){
 jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rprofile = NULL,
           prefix = NULL, sys_prefix = NULL, verbose = getOption("verbose"))
 {
-  exit_code <- run_command(command = sprintf("%s kernelspec --version", shQuote(jupyter_bin())), stdout = FALSE, stderr = FALSE)
-  if (exit_code != 0) {
-    stop("Please install jupyter first via `add_jupyter()`\n")
+
+  if (get_os() != "windows") {
+    exit_code <- run_command(command = sprintf("%s kernelspec --version", shQuote(jupyter_bin())), stdout = FALSE, stderr = FALSE)
+    if(!isTRUE(exit_code == 0)){
+      warning("Please install jupyter first via `add_jupyter()`\n")
+    }
+  } else {
+    run_command(command = sprintf("%s kernelspec --version", shQuote(jupyter_bin())))
   }
   if (is.null(user)) {
     user <- (is.null(prefix) && is.null(sys_prefix))
@@ -167,8 +172,13 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
   ), con = file.path(conf_dir, "custom", "custom.js"))
   # JUPYTER_CONFIG_DIR
 
-  command <- sprintf("%s notebook", shQuote(jupyter_bin(), type = "cmd"))
+  quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
+  command <- c(
+    sprintf("%s --paths", quoted_cmd),
+    sprintf("%s notebook", quoted_cmd)
+  )
   env <- sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd"))
+  env_list <- list(`JUPYTER_CONFIG_DIR` = shQuote(conf_dir, type = "cmd"))
 
 
 
@@ -176,15 +186,16 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
     if(system.file(package = 'dipsaus') != ""){
       expr <- bquote({
         ns <- asNamespace('rpymat')
-        ns$run_command(.(command), workdir = .(workdir), env = .(env), wait = TRUE)
+        ns$run_command(.(command), workdir = .(workdir), env_list = .(env_list),
+                       env = .(env), wait = TRUE)
       })
       dipsaus::rs_exec(expr, rs = TRUE, wait = FALSE, quoted = TRUE, name = "Jupyter Notebook")
     } else {
-      run_command(command, workdir = workdir, env = env, wait = FALSE,
-                  stdout = FALSE, stderr = FALSE)
+      run_command(command, workdir = workdir, wait = FALSE, env_list = env_list,
+                  env = env, stdout = FALSE, stderr = FALSE)
     }
   } else {
-    run_command(command, workdir = workdir, env = env, wait = TRUE)
+    run_command(command, workdir = workdir, env_list = env_list, env = env, wait = TRUE)
   }
 
   invisible()
