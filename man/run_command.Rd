@@ -2,18 +2,36 @@
 % Please edit documentation in R/cmd.R
 \name{run_command}
 \alias{run_command}
+\alias{cmd_create}
+\alias{cmd_set_env}
+\alias{cmd_set_workdir}
+\alias{cmd_set_conda}
+\alias{cmd_build}
+\alias{detect_shell}
 \title{Execute command with additional environments}
 \usage{
+cmd_create(command, shell, use_glue = TRUE)
+
+cmd_set_env(command, key, value, quote = TRUE, quote_type = "cmd")
+
+cmd_set_workdir(command, workdir)
+
+cmd_set_conda(command, conda_path, env_path)
+
+cmd_build(command, .env = parent.frame(), ...)
+
+detect_shell(suggest = NULL)
+
 run_command(
   command,
-  shell = c("bash", "zsh", "csh", "tcsh"),
+  shell = detect_shell(),
   use_glue = TRUE,
   enable_conda = TRUE,
   stdout = "",
   stderr = "",
   stdin = "",
   input = NULL,
-  env = character(),
+  env_list = list(),
   wait = TRUE,
   timeout = 0,
   ...,
@@ -30,23 +48,39 @@ run_command(
 
 \item{use_glue}{whether to \code{\link[glue]{glue}} the command}
 
-\item{enable_conda}{whether to activate 'conda'}
+\item{key, value}{environment variable key and value}
 
-\item{stdout, stderr, stdin, input, env, wait, timeout, ...}{passed to
-\code{\link{system2}}}
+\item{quote, quote_type}{whether to quote the environment variables and
+what quote type should use; see \code{\link{shQuote}}}
 
 \item{workdir}{the working directory}
+
+\item{conda_path}{'conda' path; default is \code{\link{conda_path}}}
+
+\item{env_path}{'conda' environment path; default is \code{\link{env_path}}}
+
+\item{suggest}{suggested shell type; default is \code{'cmd'} on windows,
+or \code{'bash'} on others}
+
+\item{enable_conda}{whether to activate 'conda'}
+
+\item{stdout, stderr, stdin, input, wait, timeout, ...}{passed to
+\code{\link{system2}}}
+
+\item{env_list}{a key-value pairs of environment variables}
 
 \item{dry_run}{whether to dry-run the command (do not execute, simply
 returns the command), useful to debug}
 
 \item{print_cmd}{whether to print the command out}
 
-\item{glue_env}{the environment to evaluate variables when \code{use_glue}
+\item{glue_env, .env}{the environment to evaluate variables when \code{use_glue}
 is true}
 }
 \value{
-The built command.
+All the functions return a list with class
+\code{rpymat_system_command} except for
+\code{run_command}, which returns the exit code by \code{\link{system2}}.
 }
 \description{
 Enables 'conda' environment

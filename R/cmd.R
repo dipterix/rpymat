@@ -1,3 +1,52 @@
+#' @name run_command
+#' @title Execute command with additional environments
+#' @description Enables 'conda' environment
+#' @param command system command
+#' @param shell shell type
+#' @param use_glue whether to \code{\link[glue]{glue}} the command
+#' @param enable_conda whether to activate 'conda'
+#' @param stdout,stderr,stdin,input,wait,timeout,... passed to
+#' \code{\link{system2}}
+#' @param workdir the working directory
+#' @param dry_run whether to dry-run the command (do not execute, simply
+#' returns the command), useful to debug
+#' @param print_cmd whether to print the command out
+#' @param glue_env,.env the environment to evaluate variables when \code{use_glue}
+#' is true
+#' @param key,value environment variable key and value
+#' @param quote,quote_type whether to quote the environment variables and
+#' what quote type should use; see \code{\link{shQuote}}
+#' @param conda_path 'conda' path; default is \code{\link{conda_path}}
+#' @param env_path 'conda' environment path; default is \code{\link{env_path}}
+#' @param suggest suggested shell type; default is \code{'cmd'} on windows,
+#' or \code{'bash'} on others
+#' @param env_list a key-value pairs of environment variables
+#' @return All the functions return a list with class
+#' \code{rpymat_system_command} except for
+#' \code{run_command}, which returns the exit code by \code{\link{system2}}.
+#'
+#' @examples
+#'
+#' run_command("conda install -y numpy", dry_run = TRUE)
+#'
+#'
+#' a <- "This is a message"
+#' run_command('echo "{a}"', dry_run = TRUE, enable_conda = FALSE)
+#'
+#'
+#' \dontrun{
+#'
+#' # Runs on linux/osx
+#'
+#' run_command("which conda")
+#'
+#' # Use `jupyter_launch()` instead. This is just a demonstration
+#' run_command("jupyter notebook")
+#'
+#' }
+#'
+NULL
+
 #' @export
 print.rpymat_system_command <- function(x, ...){
   attrs <- attributes(x)
@@ -178,44 +227,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
   ), collapse = "\n")
 }
 
-#' @name run_command
-#' @title Execute command with additional environments
-#' @description Enables 'conda' environment
-#' @param command system command
-#' @param shell shell type
-#' @param use_glue whether to \code{\link[glue]{glue}} the command
-#' @param enable_conda whether to activate 'conda'
-#' @param stdout,stderr,stdin,input,env,wait,timeout,... passed to
-#' \code{\link{system2}}
-#' @param workdir the working directory
-#' @param dry_run whether to dry-run the command (do not execute, simply
-#' returns the command), useful to debug
-#' @param print_cmd whether to print the command out
-#' @param glue_env the environment to evaluate variables when \code{use_glue}
-#' is true
-#' @return The built command if \code{dry_run} is true; otherwise returns the
-#' exit code by \code{\link{system2}}.
-#' @examples
-#'
-#' run_command("conda install -y numpy", dry_run = TRUE)
-#'
-#'
-#' a <- "This is a message"
-#' run_command('echo "{a}"', dry_run = TRUE, enable_conda = FALSE)
-#'
-#'
-#' \dontrun{
-#'
-#' # Runs on linux/osx
-#'
-#' run_command("which conda")
-#'
-#' # Use `jupyter_launch()` instead. This is just a demonstration
-#' run_command("jupyter notebook")
-#'
-#' }
-#'
-NULL
+
 
 #' @rdname run_command
 #' @export

@@ -7,6 +7,8 @@
 #' @param open_browser whether to open the browser once launched
 #' @param token access token of the notebook
 #' @param async whether to open the notebook in the background
+#' @param dry_run whether to display the command instead of executing them;
+#' used to debug the code
 #' @param ... for \code{add_jupyter}, these are additional parameters passed to
 #' \code{jupyter_register_R}; for \code{jupyter_launch}, these are additional
 #' parameters passed to \code{jupyter_options}
@@ -43,7 +45,10 @@ NULL
 #' @rdname jupyter
 #' @export
 add_jupyter <- function(..., register_R = TRUE){
-  add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas"), ...)
+  add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas", "jupyterlab"), ...)
+  try({
+    add_packages('matlab_kernel', pip = TRUE)
+  })
   if(register_R && system.file("kernelspec", package = "IRkernel") != ""){
     jupyter_register_R(...)
   }
@@ -138,21 +143,41 @@ jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_brow
     .sep = "\n",
     # 'c.GatewayClient.url = "http://{host}:{port+1}"',
 
-    'c.NotebookApp.ip = "{host}"',
-    'c.NotebookApp.allow_origin = "*"',
-    'c.NotebookApp.port = {port}',
-    sprintf('c.NotebookApp.open_browser = %s', ifelse(isTRUE(open_browser), "True", "False")),
-    'c.NotebookApp.base_url = "/jupyter/"',
-    'c.NotebookApp.token = "{token}"',
-    'c.NotebookApp.password = ""',
-    'c.NotebookApp.notebook_dir = "{root_dir}"',
+    'c.ServerApp.ip = "{host}"',
+    'c.ServerApp.allow_origin = "*"',
+    'c.ServerApp.port = {port}',
+    sprintf('c.ServerApp.open_browser = %s', ifelse(isTRUE(open_browser), "True", "False")),
+    'c.ServerApp.base_url = "/jupyter/"',
+    'c.ServerApp.token = "{token}"',
+    'c.ServerApp.password = ""',
+    'c.ServerApp.root_dir = "{root_dir}"',
 
-    'c.NotebookApp.tornado_settings = {{',
+    'c.ServerApp.tornado_settings = {{',
     '  \'headers\' : {{',
     '    \'Content-Security-Policy\' : "frame-ancestors * \'self\' "',
     '  }}',
     '}}'
   )
+
+  # glue::glue(
+  #   .sep = "\n",
+  #   # 'c.GatewayClient.url = "http://{host}:{port+1}"',
+  #
+  #   'c.NotebookApp.ip = "{host}"',
+  #   'c.NotebookApp.allow_origin = "*"',
+  #   'c.NotebookApp.port = {port}',
+  #   sprintf('c.NotebookApp.open_browser = %s', ifelse(isTRUE(open_browser), "True", "False")),
+  #   'c.NotebookApp.base_url = "/jupyter/"',
+  #   'c.NotebookApp.token = "{token}"',
+  #   'c.NotebookApp.password = ""',
+  #   'c.NotebookApp.notebook_dir = "{root_dir}"',
+  #
+  #   'c.NotebookApp.tornado_settings = {{',
+  #   '  \'headers\' : {{',
+  #   '    \'Content-Security-Policy\' : "frame-ancestors * \'self\' "',
+  #   '  }}',
+  #   '}}'
+  # )
 }
 
 #' @rdname jupyter
@@ -178,11 +203,15 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
   quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
   command <- c(
     sprintf("%s --paths", quoted_cmd),
-    sprintf("%s notebook", quoted_cmd)
+    sprintf("%s lab", quoted_cmd)
   )
   env <- sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd"))
-  env_list <- list(`JUPYTER_CONFIG_DIR` = shQuote(conf_dir, type = "cmd"))
 
+  if(get_os() == "windows"){
+    env_list <- list(`JUPYTER_CONFIG_DIR` = conf_dir)
+  } else {
+    env_list <- list()
+  }
 
 
   if(async && !dry_run){

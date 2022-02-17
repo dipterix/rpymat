@@ -37,7 +37,8 @@ jupyter_launch(
   port = 8888,
   open_browser = TRUE,
   async = TRUE,
-  ...
+  ...,
+  dry_run = FALSE
 )
 }
 \arguments{
@@ -58,6 +59,9 @@ parameters passed to \code{jupyter_options}}
 \item{token}{access token of the notebook}
 
 \item{async}{whether to open the notebook in the background}
+
+\item{dry_run}{whether to display the command instead of executing them;
+used to debug the code}
 }
 \value{
 \code{jupyter_bin} returns the 'Jupyter' notebook binary path;
