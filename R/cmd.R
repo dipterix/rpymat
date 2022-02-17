@@ -241,8 +241,10 @@ cmd_run_script <- function(shell, script, ...){
       s <- readLines(script)
       writeLines(s, tmpfile)
       tmpfile <- normalizePath(tmpfile, winslash = "\\")
-      system2(command = "call", args = tmpfile,...)
+    } else {
+      tmpfile <- normalizePath(script, winslash = "\\")
     }
+    system2(command = tmpfile, args = character(0L), ...)
   } else {
     stop("Shell type not recognized: ", shell)
   }
