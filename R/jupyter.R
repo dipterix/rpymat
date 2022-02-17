@@ -58,7 +58,7 @@ jupyter_bin <- function(){
     file.path(env_path(), "Scripts", "jupyter.exe")
   )
   if(any(file.exists(f))){
-    f <- f[[file.exists(f)]][[1]]
+    f <- f[file.exists(f)][[1]]
   } else {
     if(get_os() == "windows"){
       f <- f[[2]]

@@ -133,7 +133,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
       s_conda <- glue::glue(
         'set PATH="{ conda_path2 };%PATH%"',
         "",
-        '"{ bin_path2 }" activate "{ env_path2 }"',
+        '"call { bin_path2 }" activate "{ env_path2 }"',
         .sep = "\n"
       )
     }
@@ -241,7 +241,7 @@ cmd_run_script <- function(shell, script, ...){
       s <- readLines(script)
       writeLines(s, tmpfile)
       tmpfile <- normalizePath(tmpfile, winslash = "\\")
-      system2(command = tmpfile, args = character(),...)
+      system2(command = "call", args = tmpfile,...)
     }
   } else {
     stop("Shell type not recognized: ", shell)
