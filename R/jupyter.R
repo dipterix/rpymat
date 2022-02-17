@@ -156,7 +156,7 @@ jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_brow
 #' @export
 jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
                            open_browser = TRUE,
-                           async = TRUE, ...){
+                           async = TRUE, ..., dry_run = FALSE){
   # add_jupyter()
   stopifnot(dir.exists(workdir))
   workdir <- normalizePath(workdir, mustWork = TRUE)
@@ -182,23 +182,22 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
 
 
 
-  if(async){
+  if(async && !dry_run){
     if(system.file(package = 'dipsaus') != ""){
       expr <- bquote({
         ns <- asNamespace('rpymat')
         ns$run_command(.(command), workdir = .(workdir), env_list = .(env_list),
-                       env = .(env), wait = TRUE)
+                       env = .(env), wait = TRUE, dry_run = .(dry_run))
       })
       dipsaus::rs_exec(expr, rs = TRUE, wait = FALSE, quoted = TRUE, name = "Jupyter Notebook")
     } else {
       run_command(command, workdir = workdir, wait = FALSE, env_list = env_list,
-                  env = env, stdout = FALSE, stderr = FALSE)
+                  env = env, stdout = FALSE, stderr = FALSE, dry_run = dry_run)
     }
   } else {
-    run_command(command, workdir = workdir, env_list = env_list, env = env, wait = TRUE)
+    run_command(command, workdir = workdir, env_list = env_list, env = env, wait = TRUE, dry_run = dry_run)
   }
 
-  invisible()
   # run_command(sprintf("%s --config-dir", shQuote(jupyter_bin(), type = "cmd")), workdir = workdir, env = sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd")), )
 }
 

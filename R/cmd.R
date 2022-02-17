@@ -6,9 +6,17 @@ print.rpymat_system_command <- function(x, ...){
     "  workdir: {attrs$workdir}",
     "  conda: {isTRUE(attrs$conda$use_conda)}",
     "  glue: {isTRUE(attrs$use_glue)}",
-    "",
-    x, .sep = "\n"
+    .sep = "\n"
   ), "\n")
+  if(length(attrs$envs)){
+    cat("Environments:\n")
+    for(k in names(attrs$envs)){
+      if(k != ""){
+        cat(sprintf("  - %s=%s\n", k, attrs$envs[[k]]))
+      }
+    }
+  }
+  cat("", x, "", sep = "\n")
   invisible(x)
 }
 
@@ -273,7 +281,7 @@ run_command <- function(command, shell = detect_shell(),
       if(key != ""){
         value <- env_list[[key]]
       }
-      cmd_set_env(command = command, key = key, value = value, quote = FALSE)
+      command <- cmd_set_env(command = command, key = key, value = value, quote = FALSE)
     }
   }
 
