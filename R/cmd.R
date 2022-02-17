@@ -115,12 +115,20 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
         .sep = "\n"
       )
     } else {
-      conda_path2 <- normalizePath(conda$conda_path, winslash = "\\", mustWork = FALSE)
+      bin_path <- file.path(conda$conda_path, "condabin", c("conda", "conda.exe", "conda.bin", "conda.bat"))
+      sel <- file.exists(bin_path)
+      if(any(sel)){
+        bin_path <- bin_path[sel][[1]]
+      } else {
+        bin_path <- bin_path[[1]]
+      }
+      bin_path2 <- normalizePath(bin_path, winslash = "\\", mustWork = FALSE)
+      conda_path2 <- normalizePath(file.path(conda$conda_path, "bin"), winslash = "\\", mustWork = FALSE)
       env_path2 <- normalizePath(conda$conda_path, winslash = "\\", mustWork = FALSE)
       s_conda <- glue::glue(
         'set PATH="{ conda_path2 };%PATH%"',
         "",
-        '"{ conda_path2 }" activate "{ env_path2 }"',
+        '"{ bin_path2 }" activate "{ env_path2 }"',
         .sep = "\n"
       )
     }
@@ -172,7 +180,8 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
 #' @param print_cmd whether to print the command out
 #' @param glue_env the environment to evaluate variables when \code{use_glue}
 #' is true
-#' @return The built command.
+#' @return The built command if \code{dry_run} is true; otherwise returns the
+#' exit code by \code{\link{system2}}.
 #' @examples
 #'
 #' run_command("conda install -y numpy", dry_run = TRUE)
@@ -288,5 +297,5 @@ run_command <- function(command, shell = detect_shell(),
   #         stdout = stdout, stderr = stderr, stdin = stdin, input = input,
   #         env = env, wait = wait, timeout = timeout, ...)
 
-  return(invisible(command))
+  # return(invisible(command))
 }
