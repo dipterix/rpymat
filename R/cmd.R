@@ -213,7 +213,7 @@ detect_shell <- function(suggest = NULL){
   re[[1]]
 }
 
-run_script <- function(shell, script, ...){
+cmd_run_script <- function(shell, script, ...){
   if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")){
     system2(command = Sys.which(shell), args = tmpfile, ...)
   } else if(shell %in% "cmd"){
@@ -281,7 +281,7 @@ run_command <- function(command, shell = detect_shell(),
 
   tmpfile <- normalizePath(tmpfile)
 
-  run_script(shell = shell, script = tmpfile,
+  cmd_run_script(shell = shell, script = tmpfile,
              stdout = stdout, stderr = stderr, stdin = stdin, input = input,
              env = env, wait = wait, timeout = timeout, ...)
   # system2(command = Sys.which(shell), args = tmpfile,
