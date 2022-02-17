@@ -163,7 +163,7 @@ set_conda <- function(temporary = TRUE){
   Sys.setenv("RETICULATE_MINICONDA_PATH" = conda_path())
 
 
-  conda_path <- file.path(conda_path(), "condabin", c("conda", "conda.exe", "conda.bin"))
+  conda_path <- file.path(conda_path(), "condabin", c("conda", "conda.exe", "conda.bin", "conda.bat"))
   conda_path <- conda_path[file.exists(conda_path)]
   if(length(conda_path)){
     options("reticulate.conda_binary" = conda_path[[1]])

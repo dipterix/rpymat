@@ -43,7 +43,7 @@ NULL
 #' @rdname jupyter
 #' @export
 add_jupyter <- function(..., register_R = TRUE){
-  add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas", "pyarrow"), ...)
+  add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas"), ...)
   if(register_R && system.file("kernelspec", package = "IRkernel") != ""){
     jupyter_register_R(...)
   }

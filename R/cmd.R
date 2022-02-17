@@ -12,6 +12,8 @@ print.rpymat_system_command <- function(x, ...){
   invisible(x)
 }
 
+#' @rdname run_command
+#' @export
 cmd_create <- function(command, shell, use_glue = TRUE){
 
   structure(
@@ -26,7 +28,8 @@ cmd_create <- function(command, shell, use_glue = TRUE){
 
 }
 
-
+#' @rdname run_command
+#' @export
 cmd_set_env <- function(command, key, value, quote = TRUE, quote_type = "cmd"){
   stopifnot(inherits(command, "rpymat_system_command"))
   envs <- attr(command, "envs")
@@ -38,6 +41,8 @@ cmd_set_env <- function(command, key, value, quote = TRUE, quote_type = "cmd"){
   command
 }
 
+#' @rdname run_command
+#' @export
 cmd_set_workdir <- function(command, workdir){
   if(!length(workdir) || !dir.exists(workdir)){
     workdir <- getwd()
@@ -47,6 +52,8 @@ cmd_set_workdir <- function(command, workdir){
   command
 }
 
+#' @rdname run_command
+#' @export
 cmd_set_conda <- function(command, conda_path, env_path) {
   conda_path <- normalizePath(conda_path, mustWork = FALSE)
   env_path <- normalizePath(env_path, mustWork = FALSE)
@@ -58,6 +65,8 @@ cmd_set_conda <- function(command, conda_path, env_path) {
   command
 }
 
+#' @rdname run_command
+#' @export
 cmd_build <- function(command, .env = parent.frame(), ...) {
 
   attrs <- attributes(command)
@@ -67,7 +76,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
   }
 
   shell <- attrs$shell
-  if(shell %in% c("bash", "zsh", "csh", "tcsh")) {
+  if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")) {
     s_shell <- sprintf("#!/usr/bin/env %s", shell)
   } else {
     s_shell <- NULL
@@ -87,7 +96,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
         'conda activate "{ conda$env_path }"',
         .sep = "\n"
       )
-    } else {
+    } else if(shell %in% c("bash", "zsh", "sh")){
       s_conda <- glue::glue(
         # "export DYLD_LIBRARY_PATH=/opt/X11/lib/flat_namespace",
         "__conda_setup=\"$('{ conda$conda_path }/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)\"",
@@ -105,6 +114,15 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
         'conda activate "{ conda$env_path }"',
         .sep = "\n"
       )
+    } else {
+      conda_path2 <- normalizePath(conda$conda_path, winslash = "\\", mustWork = FALSE)
+      env_path2 <- normalizePath(conda$conda_path, winslash = "\\", mustWork = FALSE)
+      s_conda <- glue::glue(
+        'set PATH="{ conda_path2 };%PATH%"',
+        "",
+        '"{ conda_path2 }" activate "{ env_path2 }"',
+        .sep = "\n"
+      )
     }
   } else {
     s_conda <- NULL
@@ -115,6 +133,11 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
     s_envs <- unlist(lapply(names(envs), function(env_key){
       env_val <- envs[[env_key]][[1]]
       sprintf("setenv %s %s", env_key, env_val)
+    }))
+  } else if(shell %in% c("cmd")){
+    s_envs <- unlist(lapply(names(envs), function(env_key){
+      env_val <- envs[[env_key]][[1]]
+      sprintf("set %s=%s", env_key, env_val)
     }))
   } else {
     s_envs <- unlist(lapply(names(envs), function(env_key){
@@ -134,7 +157,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
   ), collapse = "\n")
 }
 
-
+#' @name run_command
 #' @title Execute command with additional environments
 #' @description Enables 'conda' environment
 #' @param command system command
@@ -170,8 +193,51 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
 #'
 #' }
 #'
+NULL
+
+#' @rdname run_command
 #' @export
-run_command <- function(command, shell = c("bash", "zsh", "csh", "tcsh"),
+detect_shell <- function(suggest = NULL){
+  os <- get_os()
+  if(os == 'windows'){
+    re <- c("cmd", "sh")
+  } else {
+    re <- c("bash", "zsh", "csh", "tcsh", "sh")
+  }
+  if(length(suggest)){
+    re0 <- re[re %in% suggest]
+    if(length(re0)){
+      re <- re0
+    }
+  }
+  re[[1]]
+}
+
+run_script <- function(shell, script, ...){
+  if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")){
+    system2(command = Sys.which(shell), args = tmpfile, ...)
+  } else if(shell %in% "cmd"){
+    if(!endsWith(tolower(script), ".bat")){
+      tmpfile <- tempfile(fileext = ".bat")
+      on.exit({
+        if(file.exists(tmpfile)){
+          try({ unlink(tmpfile) })
+        }
+      })
+      s <- readLines(script)
+      writeLines(s, tmpfile)
+      tmpfile <- normalizePath(tmpfile, winslash = "\\")
+      system2(command = tmpfile, args = character(),...)
+    }
+  } else {
+    stop("Shell type not recognized: ", shell)
+  }
+
+}
+
+#' @rdname run_command
+#' @export
+run_command <- function(command, shell = detect_shell(),
                         use_glue = TRUE, enable_conda = TRUE,
                         stdout = "", stderr = "", stdin = "", input = NULL,
                         env = character(), wait = TRUE, timeout = 0, ...,
@@ -205,19 +271,22 @@ run_command <- function(command, shell = c("bash", "zsh", "csh", "tcsh"),
     message(cmd)
   }
 
-  tmpfile <- tempfile(fileext = "rpymat_command_")
+  tmpfile <- tempfile(pattern = "rpymat_command_", fileext = ifelse(get_os() == 'windows', '.bat', ".sh"))
   on.exit({
     if(file.exists(tmpfile)){
-      unlink(tmpfile)
+      try({ unlink(tmpfile) })
     }
   })
   writeLines(cmd, con = tmpfile)
 
   tmpfile <- normalizePath(tmpfile)
 
-  system2(command = Sys.which(shell), args = tmpfile,
-          stdout = stdout, stderr = stderr, stdin = stdin, input = input,
-          env = env, wait = wait, timeout = timeout, ...)
+  run_script(shell = shell, script = tmpfile,
+             stdout = stdout, stderr = stderr, stdin = stdin, input = input,
+             env = env, wait = wait, timeout = timeout, ...)
+  # system2(command = Sys.which(shell), args = tmpfile,
+  #         stdout = stdout, stderr = stderr, stdin = stdin, input = input,
+  #         env = env, wait = wait, timeout = timeout, ...)
 
   return(invisible(command))
 }
