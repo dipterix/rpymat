@@ -184,7 +184,7 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
         conda_path2 <- normalizePath(file.path(conda$conda_path, "bin"), winslash = "\\", mustWork = FALSE)
       }
 
-      env_path2 <- normalizePath(conda$conda_path, winslash = "\\", mustWork = FALSE)
+      env_path2 <- normalizePath(conda$env_path, winslash = "\\", mustWork = FALSE)
       s_conda <- glue::glue(
         'set PATH="{ conda_path2 };%PATH%"',
         "",
