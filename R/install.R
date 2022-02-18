@@ -148,7 +148,11 @@ conda_bin <- function(){
 #' @rdname conda-env
 #' @export
 env_path <- function(){
-  return( file.path(install_root(), CONDAENV_NAME()) )
+  return( normalizePath(
+    file.path(conda_path(), 'envs', CONDAENV_NAME()),
+    winslash = "\\",
+    mustWork = FALSE
+  ) )
 }
 
 set_conda <- function(temporary = TRUE){
@@ -298,6 +302,8 @@ configure_conda <- function(python_ver = "auto",
                             matlab = NULL,
                             update = FALSE, force = FALSE){
 
+  packages <- unique(c(packages, "numpy"))
+
   error <- TRUE
   set_conda(temporary = TRUE)
 
@@ -398,9 +404,22 @@ add_packages <- function(packages = NULL, python_ver = 'auto', ...) {
 #' @export
 ensure_rpymat <- function(){
   set_conda(temporary = FALSE)
-  Sys.setenv("RETICULATE_PYTHON" = normalizePath(file.path(env_path(), 'bin', "python")))
-  reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
-  reticulate::py_config()
+
+  if(!dir.exists(env_path())) {
+    configure_conda()
+  }
+
+  if(get_os() == "windows"){
+    # C:\Users\KickStarter\AppData\Local\r-rpymat\miniconda\python.exe
+    python_bin <- normalizePath(file.path(conda_path(), "python.exe"), winslash = "\\")
+  } else {
+    python_bin <- normalizePath(file.path(env_path(), 'bin', "python"))
+  }
+
+  Sys.setenv("RETICULATE_PYTHON" = python_bin)
+  # reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
+  # reticulate::py_config()
+  reticulate::py_discover_config(use_environment = env_path())
 }
 
 #' @rdname conda-env
