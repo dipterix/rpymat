@@ -10,6 +10,7 @@
 \alias{jupyter_check_launch}
 \alias{jupyter_server_list}
 \alias{jupyter_server_stop}
+\alias{jupyter_server_stop_all}
 \title{Install, register, launch 'Jupyter' notebook to the virtual environment}
 \usage{
 add_jupyter(..., register_R = TRUE)
@@ -49,6 +50,8 @@ jupyter_check_launch(port = 8888, open_browser = TRUE, ...)
 jupyter_server_list()
 
 jupyter_server_stop(port, ...)
+
+jupyter_server_stop_all(...)
 }
 \arguments{
 \item{...}{for \code{add_jupyter}, these are additional parameters passed to
@@ -76,7 +79,9 @@ used to debug the code}
 \code{jupyter_bin} returns the 'Jupyter' notebook binary path;
 \code{jupyter_options} returns the 'Jupyter' configuration in strings;
 \code{jupyter_server_list} returns a table of existing local 'Jupyter'
-server hosts, ports, and tokens;
+server hosts, ports, and tokens; \code{jupyter_check_launch} returns true
+if a new server has been created, or false if there has been an existing
+server at the port;
 other functions return nothing.
 }
 \description{

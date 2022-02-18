@@ -15,7 +15,9 @@
 #' @return \code{jupyter_bin} returns the 'Jupyter' notebook binary path;
 #' \code{jupyter_options} returns the 'Jupyter' configuration in strings;
 #' \code{jupyter_server_list} returns a table of existing local 'Jupyter'
-#' server hosts, ports, and tokens;
+#' server hosts, ports, and tokens; \code{jupyter_check_launch} returns true
+#' if a new server has been created, or false if there has been an existing
+#' server at the port;
 #' other functions return nothing.
 #'
 #' @examples
@@ -252,14 +254,27 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
 jupyter_check_launch <- function(port = 8888, open_browser = TRUE, ...){
   port <- as.integer(port)
   stopifnot(is.finite(port))
-  server_list <- jupyter_server_list()
-  if(!port %in% server_list$port){
-    jupyter_launch(port = port, open_browser = open_browser, ..., dry_run = FALSE)
-  } else if(open_browser){
-    instance <- server_list[server_list$port == port]
-    url <- sprintf("http://%s:%s/jupyter/lab?token=%s", instance$host, instance$port, instance$token)
-    utils::browseURL(url)
-  }
+
+  open_browser <- as.logical(open_browser)
+
+  tryCatch({
+    server_list <- jupyter_server_list()
+    if(port %in% server_list$port){
+      if(!isFALSE(open_browser)){
+        instance <- server_list[server_list$port == port, ]
+        url <- sprintf("http://%s:%s/jupyter/lab?token=%s", instance$host, instance$port, instance$token)
+        utils::browseURL(url)
+      }
+      return(FALSE)
+    }
+  }, error = function(e){
+    if(!identical(e$message, "No Jupyter server instance is running")){
+      warning(e)
+    }
+  })
+  jupyter_launch(port = port, open_browser = open_browser, ..., dry_run = FALSE)
+
+  return(TRUE)
 }
 
 
@@ -304,10 +319,18 @@ jupyter_server_list <- function(){
 #' @export
 jupyter_server_stop <- function(port, ...){
   quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
-  command <- c(
-    "echo off",
-    sprintf("%s server stop {port}", quoted_cmd)
-  )
+  command <- sprintf("%s server stop %.0f", quoted_cmd, port)
   run_command(command, wait = TRUE, ...)
 }
 
+
+#' @rdname jupyter
+#' @export
+jupyter_server_stop_all <- function(...){
+  try({
+    server_list <- jupyter_server_list()
+    quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
+    command <- sprintf("%s server stop %.0f", quoted_cmd, server_list$port)
+    run_command(command, wait = TRUE, ...)
+  }, silent = TRUE)
+}
