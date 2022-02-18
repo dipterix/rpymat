@@ -411,7 +411,7 @@ ensure_rpymat <- function(){
 
   if(get_os() == "windows"){
     # C:\Users\KickStarter\AppData\Local\r-rpymat\miniconda\python.exe
-    python_bin <- normalizePath(file.path(conda_path(), "python.exe"), winslash = "\\")
+    python_bin <- normalizePath(file.path(env_path(), "python.exe"), winslash = "\\")
   } else {
     python_bin <- normalizePath(file.path(env_path(), 'bin', "python"))
   }
