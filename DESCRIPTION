@@ -23,6 +23,5 @@ Imports:
     git2r (>= 0.28.0),
     glue (>= 1.4.2),
     IRkernel (>= 1.3),
-    jsonlite (>= 1.7.3)
-Suggests: 
-    dipsaus (>= 0.2.0)
+    jsonlite (>= 1.7.3),
+    rstudioapi (>= 0.13)

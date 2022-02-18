@@ -215,21 +215,25 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
     env_list <- list()
   }
 
-
   if(async && !dry_run){
-    if(system.file(package = 'dipsaus') != ""){
-      expr <- bquote({
-        ns <- asNamespace('rpymat')
-        ns$run_command(.(command), workdir = .(workdir), env_list = .(env_list),
-                       env = .(env), wait = TRUE, dry_run = .(dry_run))
-      })
-      dipsaus::rs_exec(expr, rs = TRUE, wait = FALSE, quoted = TRUE, name = "Jupyter Notebook")
-    } else {
-      run_command(command, workdir = workdir, wait = FALSE, env_list = env_list,
-                  env = env, stdout = FALSE, stderr = FALSE, dry_run = dry_run)
-    }
+    requireNamespace('rstudioapi')
+    tf <- tempfile()
+
+    expr <- bquote({
+      ns <- asNamespace('rpymat')
+      ns$run_command(.(command), workdir = .(workdir), env_list = .(env_list),
+                     env = .(env), wait = TRUE, dry_run = .(dry_run))
+    })
+
+    writeLines(deparse(expr), con = tf)
+
+    rstudioapi::jobRunScript(tf, name = "JupyterLab Server", workingDir = workdir, importEnv = NULL, exportEnv = "")
+    try({
+      rstudioapi::executeCommand("activateConsole", quiet = TRUE)
+    }, silent = TRUE)
   } else {
-    run_command(command, workdir = workdir, env_list = env_list, env = env, wait = TRUE, dry_run = dry_run)
+    run_command(command, workdir = workdir, env_list = env_list,
+                env = env, wait = TRUE, dry_run = dry_run)
   }
 
   # run_command(sprintf("%s --config-dir", shQuote(jupyter_bin(), type = "cmd")), workdir = workdir, env = sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd")), )
@@ -246,6 +250,7 @@ jupyter_server_list <- function(){
   )
 
   res <- run_command(command, wait = TRUE, stdout = TRUE, stderr = TRUE)
+
   res <- res[grepl("http[s]{0,1}://.*:[0-9]{2,5}/jupyter/", res)]
   res <- strsplit(res, "/jupyter/")
   res <- lapply(res, function(x){
@@ -261,6 +266,9 @@ jupyter_server_list <- function(){
     c(x[1:2], token)
   })
 
+  if(!length(res)){
+    stop("No Jupyter server instance is running")
+  }
   res <- do.call('rbind', res[sapply(res, length) == 3])
   res <- as.data.frame(res)
   names(res) <- c("host", "port", "token")
@@ -269,5 +277,14 @@ jupyter_server_list <- function(){
 }
 
 
-
+#' @rdname jupyter
+#' @export
+jupyter_server_stop <- function(port, ...){
+  quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
+  command <- c(
+    "echo off",
+    sprintf("%s server stop {port}", quoted_cmd)
+  )
+  run_command(command, wait = TRUE, ...)
+}
 

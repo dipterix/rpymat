@@ -8,6 +8,7 @@
 \alias{jupyter_options}
 \alias{jupyter_launch}
 \alias{jupyter_server_list}
+\alias{jupyter_server_stop}
 \title{Install, register, launch 'Jupyter' notebook to the virtual environment}
 \usage{
 add_jupyter(..., register_R = TRUE)
@@ -43,6 +44,8 @@ jupyter_launch(
 )
 
 jupyter_server_list()
+
+jupyter_server_stop(port, ...)
 }
 \arguments{
 \item{...}{for \code{add_jupyter}, these are additional parameters passed to

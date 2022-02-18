@@ -247,17 +247,19 @@ detect_shell <- function(suggest = NULL){
   re[[1]]
 }
 
-cmd_run_script <- function(shell, script, ...){
+cmd_run_script <- function(shell, script, wait = TRUE, ...){
   if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")){
     system2(command = Sys.which(shell), args = script, ...)
   } else if(shell %in% "cmd"){
     if(!endsWith(tolower(script), ".bat")){
       tmpfile <- tempfile(fileext = ".bat")
-      on.exit({
-        if(file.exists(tmpfile)){
-          try({ unlink(tmpfile) })
-        }
-      })
+      if(wait) {
+        on.exit({
+          if(file.exists(tmpfile)){
+            try({ unlink(tmpfile) })
+          }
+        })
+      }
       s <- readLines(script)
       writeLines(s, tmpfile)
       tmpfile <- normalizePath(tmpfile, winslash = "\\")
@@ -316,11 +318,13 @@ run_command <- function(command, shell = detect_shell(),
   }
 
   tmpfile <- tempfile(pattern = "rpymat_command_", fileext = ifelse(get_os() == 'windows', '.bat', ".sh"))
-  on.exit({
-    if(file.exists(tmpfile)){
-      try({ unlink(tmpfile) })
-    }
-  })
+  if(wait){
+    on.exit({
+      if(file.exists(tmpfile)){
+        try({ unlink(tmpfile) })
+      }
+    })
+  }
   writeLines(cmd, con = tmpfile)
 
   tmpfile <- normalizePath(tmpfile)
