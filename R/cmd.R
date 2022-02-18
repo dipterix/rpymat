@@ -3,7 +3,8 @@
 #' @description Enables 'conda' environment
 #' @param command system command
 #' @param shell shell type
-#' @param use_glue whether to \code{\link[glue]{glue}} the command
+#' @param use_glue whether to \code{\link[glue]{glue}} the command; default is
+#' false
 #' @param enable_conda whether to activate 'conda'
 #' @param stdout,stderr,stdin,input,wait,timeout,... passed to
 #' \code{\link{system2}}
@@ -31,17 +32,14 @@
 #'
 #'
 #' a <- "This is a message"
-#' run_command('echo "{a}"', dry_run = TRUE, enable_conda = FALSE)
+#' run_command('echo "{a}"', dry_run = TRUE,
+#'             enable_conda = FALSE, use_glue = TRUE)
 #'
 #'
 #' \dontrun{
 #'
-#' # Runs on linux/osx
-#'
-#' run_command("which conda")
-#'
 #' # Use `jupyter_launch()` instead. This is just a demonstration
-#' run_command("jupyter notebook")
+#' run_command('"{jupyter_bin()}" server list', use_glue = TRUE)
 #'
 #' }
 #'
@@ -276,7 +274,7 @@ cmd_run_script <- function(shell, script, wait = TRUE, ...){
 #' @rdname run_command
 #' @export
 run_command <- function(command, shell = detect_shell(),
-                        use_glue = TRUE, enable_conda = TRUE,
+                        use_glue = FALSE, enable_conda = TRUE,
                         stdout = "", stderr = "", stdin = "", input = NULL,
                         env_list = list(), wait = TRUE, timeout = 0, ...,
                         workdir = getwd(), dry_run = FALSE, print_cmd = dry_run,

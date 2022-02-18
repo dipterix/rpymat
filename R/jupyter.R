@@ -49,7 +49,8 @@ NULL
 add_jupyter <- function(..., register_R = TRUE){
   add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas", "jupyterlab"), ...)
   try({
-    add_packages('matlab_kernel', pip = TRUE)
+    add_packages(packages = c("jupyterlab-git", "ipywidgets", "jupyter-server-proxy"), channel = "conda-forge")
+    add_packages(c('jupyterlab_latex', 'jupyterlab_github', 'matlab_kernel'), pip = TRUE)
   })
   if(register_R && system.file("kernelspec", package = "IRkernel") != ""){
     jupyter_register_R(...)
@@ -184,14 +185,20 @@ jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_brow
 
 #' @rdname jupyter
 #' @export
-jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
-                           open_browser = TRUE,
-                           async = TRUE, ..., dry_run = FALSE){
+jupyter_launch <- function(host = "127.0.0.1", port = 8888,
+                           open_browser = TRUE, workdir = getwd(),
+                           async = FALSE, ..., dry_run = FALSE){
+  port <- as.integer(port)
+  stopifnot(is.finite(port))
   # add_jupyter()
   stopifnot(dir.exists(workdir))
   workdir <- normalizePath(workdir, mustWork = TRUE)
   conf <- jupyter_options(root_dir = workdir, host = host, port = port, open_browser = open_browser, ...)
-  conf_dir <- tempfile()
+
+  conf_dir <- file.path(
+    R_user_dir(package = 'rpymat', which = "config"),
+    'jupyter-configurations', port
+  )
   dir.create(file.path(conf_dir, "custom"), showWarnings = FALSE, recursive = TRUE)
   conf_dir <- normalizePath(conf_dir)
   writeLines(conf, con = file.path(conf_dir, "jupyter_notebook_config.py"))
@@ -237,6 +244,22 @@ jupyter_launch <- function(workdir = getwd(), host = "127.0.0.1", port = 8888,
   }
 
   # run_command(sprintf("%s --config-dir", shQuote(jupyter_bin(), type = "cmd")), workdir = workdir, env = sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd")), )
+}
+
+
+#' @rdname jupyter
+#' @export
+jupyter_check_launch <- function(port = 8888, open_browser = TRUE, ...){
+  port <- as.integer(port)
+  stopifnot(is.finite(port))
+  server_list <- jupyter_server_list()
+  if(!port %in% server_list$port){
+    jupyter_launch(port = port, open_browser = open_browser, ..., dry_run = FALSE)
+  } else if(open_browser){
+    instance <- server_list[server_list$port == port]
+    url <- sprintf("http://%s:%s/jupyter/lab?token=%s", instance$host, instance$port, instance$token)
+    utils::browseURL(url)
+  }
 }
 
 

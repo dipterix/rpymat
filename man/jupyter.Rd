@@ -7,6 +7,7 @@
 \alias{jupyter_register_R}
 \alias{jupyter_options}
 \alias{jupyter_launch}
+\alias{jupyter_check_launch}
 \alias{jupyter_server_list}
 \alias{jupyter_server_stop}
 \title{Install, register, launch 'Jupyter' notebook to the virtual environment}
@@ -34,14 +35,16 @@ jupyter_options(
 )
 
 jupyter_launch(
-  workdir = getwd(),
   host = "127.0.0.1",
   port = 8888,
   open_browser = TRUE,
-  async = TRUE,
+  workdir = getwd(),
+  async = FALSE,
   ...,
   dry_run = FALSE
 )
+
+jupyter_check_launch(port = 8888, open_browser = TRUE, ...)
 
 jupyter_server_list()
 
