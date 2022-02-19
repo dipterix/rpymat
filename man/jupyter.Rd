@@ -45,7 +45,14 @@ jupyter_launch(
   dry_run = FALSE
 )
 
-jupyter_check_launch(port = 8888, open_browser = TRUE, ...)
+jupyter_check_launch(
+  port = 8888,
+  host = "127.0.0.1",
+  open_browser = TRUE,
+  workdir = getwd(),
+  async = "auto",
+  ...
+)
 
 jupyter_server_list()
 

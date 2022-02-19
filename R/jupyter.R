@@ -225,7 +225,9 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
   }
 
   if(async && !dry_run){
-    requireNamespace('rstudioapi')
+    if(!rstudioapi::isAvailable("1.4")){
+      stop("`async=TRUE` option only runs in RStudio (>=1.4)")
+    }
     tf <- tempfile()
 
     expr <- bquote({
@@ -251,7 +253,9 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
 
 #' @rdname jupyter
 #' @export
-jupyter_check_launch <- function(port = 8888, open_browser = TRUE, ...){
+jupyter_check_launch <- function(port = 8888, host = "127.0.0.1",
+                                 open_browser = TRUE, workdir = getwd(),
+                                 async = 'auto', ...){
   port <- as.integer(port)
   stopifnot(is.finite(port))
 
@@ -272,7 +276,14 @@ jupyter_check_launch <- function(port = 8888, open_browser = TRUE, ...){
       warning(e)
     }
   })
-  jupyter_launch(port = port, open_browser = open_browser, ..., dry_run = FALSE)
+  if(identical(async, "auto")){
+    async <- rstudioapi::isAvailable("1.4")
+  } else {
+    async <- as.logical(async)
+  }
+  jupyter_launch(port = port, open_browser = open_browser,
+                 host = host, workdir = workdir, async = async,
+                 ..., dry_run = FALSE)
 
   return(TRUE)
 }
