@@ -446,7 +446,7 @@ ensure_rpymat <- function(verbose = TRUE){
   if(verbose){
     print(conf)
     if(length(blas)){
-      cat("\nOPENBLAS =", blas)
+      cat("\nOPENBLAS =", blas, "\n")
     }
   }
   invisible(conf)
