@@ -37,7 +37,7 @@ remove_conda(ask = TRUE)
 
 add_packages(packages = NULL, python_ver = "auto", ...)
 
-ensure_rpymat()
+ensure_rpymat(verbose = TRUE)
 
 matlab_engine()
 
@@ -73,6 +73,8 @@ be removed and force to be interactive in the future.}
 \item{...}{for \code{add_packages}, these are additional parameters
 passing to \code{\link[reticulate]{conda_install}}; for
 \code{call_matlab}, \code{...} are the parameters passing to \code{fun}}
+
+\item{verbose}{whether to print messages}
 
 \item{fun}{'Matlab' function name, character (experimental)}
 
@@ -113,14 +115,6 @@ downloads the latest 'Miniconda' and configures the latest \code{python}.
 If any other versions of 'Miniconda' is ought to be installed,
 please set options \code{"reticulate.miniconda.url"} to change the
 source location.
-
-On Apple's 'M1' machine, there is no official native 'Miniconda' as of
-2021-11-01. The default \code{conda} will be the \href{https://github.com/conda-forge/miniforge/releases/tag/4.9.2-7}{'Mambaforge'} compiled by
-the \code{'conda-forge'} team. This version will subject to change in the near
-future once the official support is released. Sometimes the 'Mambaforge'
-is too advanced and not all the dependencies are properly compiled.
-In such cases, you will receive errors like "Package 'xxx' conflicts
-for". Try a lower version of \code{python_ver} (such as "3.9").
 
 If 'Matlab' is to be installed, please specify the 'Matlab' path when
 running \code{configure_conda}. If the environment has been setup,
