@@ -6,3 +6,4 @@
 ^adhoc$
 ^CRAN-RELEASE$
 ^\.ipynb_checkpoints$
+^CRAN-SUBMISSION$

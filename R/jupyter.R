@@ -100,6 +100,7 @@ jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rpr
     stop("\"user\", \"prefix\", \"sys_prefix\" are mutually exclusive")
   }
 
+  requireNamespace("IRkernel", quietly = TRUE)
   srcdir <- system.file("kernelspec", package = "IRkernel")
   tmp_name <- tempfile()
   dir.create(tmp_name)

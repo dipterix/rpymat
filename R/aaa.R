@@ -1,3 +1,5 @@
+#' @importFrom IRkernel installspec
+NULL
 
 get_os <- function(){
   if("windows" %in% tolower(.Platform$OS.type)){

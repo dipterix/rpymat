@@ -1,3 +1,9 @@
+# rpymat 0.1.3
+
+* Fixed command-line script failing to load `conda`
+* Allowed to use the `miniconda` installed at user's home directory
+* Use slash instead of backslash on `Windows` system to avoid escaping issues
+
 # rpymat 0.1.2
 
 * Fixed `BLAS` issues on some `Unix` systems

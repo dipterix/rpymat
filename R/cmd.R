@@ -154,17 +154,17 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
     } else if(shell %in% c("bash", "zsh", "sh")){
       s_conda <- glue::glue(
         # "export DYLD_LIBRARY_PATH=/opt/X11/lib/flat_namespace",
-        "__conda_setup=\"$('{ conda$conda_path }/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)\"",
-        "if [ $? -eq 0 ]; then",
-        '  eval "$__conda_setup"',
+        # "__conda_setup=\"$('{ conda$conda_path }/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)\"",
+        # "if [ $? -eq 0 ]; then",
+        # '  eval "$__conda_setup"',
+        # "else",
+        'if [ -f "{ conda$conda_path }/etc/profile.d/conda.sh" ]; then',
+        '  . "{ conda$conda_path }/etc/profile.d/conda.sh"',
         "else",
-        '  if [ -f "{ conda$conda_path }/etc/profile.d/conda.sh" ]; then',
-        '    . "{ conda$conda_path }/etc/profile.d/conda.sh"',
-        "  else",
-        '    export PATH="{ conda$conda_path }/bin:$PATH"',
-        "  fi",
+        '  export PATH="{ conda$conda_path }/bin:$PATH"',
         "fi",
-        "unset __conda_setup",
+        # "fi",
+        # "unset __conda_setup",
         "",
         'conda activate "{ conda$env_path }"',
         .sep = "\n"
@@ -283,8 +283,13 @@ run_command <- function(command, shell = detect_shell(),
   shell <- match.arg(shell)
   command <- cmd_create(command, shell, use_glue = use_glue)
   if(enable_conda){
-    command <- cmd_set_conda(command, conda_path(), env_path())
-
+    conda_bin <- conda_bin()
+    if(length(conda_bin)) {
+      conda_path <- normalizePath(file.path(conda_bin, "..", ".."), winslash = "/")
+    } else {
+      conda_path <- conda_path()
+    }
+    command <- cmd_set_conda(command, conda_path, env_path())
   }
   command <- cmd_set_workdir(command, workdir)
 

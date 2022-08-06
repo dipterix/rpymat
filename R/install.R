@@ -116,7 +116,7 @@ install_root <- function(){
   } else {
     root <- normalizePath(rappdirs::user_data_dir(), winslash = "/",
                           mustWork = FALSE)
-    path <- file.path(root, "r-rpymat")
+    path <- file.path(root, "r-rpymat", fsep = "/")
   }
   getOption("rpymat.install_root", path)
 }
@@ -124,16 +124,22 @@ install_root <- function(){
 #' @rdname conda-env
 #' @export
 conda_path <- function(){
-  file.path(install_root(), "miniconda")
+  file.path(install_root(), "miniconda", fsep = "/")
 }
 
 #' @rdname conda-env
 #' @export
 conda_bin <- function(){
-  bin_path <- file.path(conda_path(), "condabin", c("conda", "conda.exe", "conda.bin", "conda.bat"))
+  bin_path <- file.path(install_root(), "miniconda", "condabin", c("conda", "conda.exe", "conda.bin", "conda.bat"), fsep = "/")
   bin_path <- bin_path[file.exists(bin_path)]
   if(length(bin_path)){
     bin_path <- bin_path[[1]]
+  } else {
+    bin_path <- tryCatch({
+      reticulate::conda_binary()
+    }, error = function(e) {
+      character(0)
+    })
   }
   bin_path
 }
@@ -142,7 +148,7 @@ conda_bin <- function(){
 #' @export
 env_path <- function(){
   return( normalizePath(
-    file.path(conda_path(), 'envs', CONDAENV_NAME()),
+    file.path(install_root(), "miniconda", 'envs', CONDAENV_NAME()),
     winslash = "\\",
     mustWork = FALSE
   ) )
@@ -456,7 +462,7 @@ ensure_rpymat <- function(verbose = TRUE){
 #' @export
 matlab_engine <- function(){
   set_conda(temporary = FALSE)
-  reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE, conda = file.path(conda_path(), "bin", "conda"))
+  reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE, conda = conda_bin())
 
   if(reticulate::py_module_available("matlab.engine")){
     matlab <- reticulate::import('matlab.engine')
