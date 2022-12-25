@@ -87,7 +87,7 @@ rpymat::jupyter_server_stop(port = 18888)
 
 rpymat::ensure_rpymat()
 
-reticulate::repl_python()
+rpymat::repl_python()
 ```
 
 Then run python code interactively. 

@@ -1,8 +1,11 @@
+Copyright 2021-2022 Zhengjia Wang. All rights reserved.
+
 Apache License
 ==============
 
 _Version 2.0, January 2004_
-_&lt;<http://www.apache.org/licenses/>&gt;_
+
+http://www.apache.org/licenses/
 
 ### Terms and Conditions for use, reproduction, and distribution
 
