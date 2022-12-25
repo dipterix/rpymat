@@ -35,7 +35,7 @@ run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE){
   }
 
   x <- normalizePath(x, mustWork = TRUE)
-  ensure_rpymat()
+  ensure_rpymat(verbose = FALSE)
   reticulate::py_run_file(file = x, local = local, convert = convert)
 }
 
