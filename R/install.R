@@ -154,6 +154,12 @@ env_path <- function(){
   ) )
 }
 
+#' @rdname conda-env
+#' @export
+list_pkgs <- function(...) {
+  reticulate::py_list_packages(envname = env_path(), ...)
+}
+
 set_conda <- function(temporary = TRUE){
   old_path <- Sys.getenv('RETICULATE_MINICONDA_PATH', unset = "")
   if(old_path == ""){

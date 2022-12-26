@@ -6,6 +6,7 @@
 \alias{conda_path}
 \alias{conda_bin}
 \alias{env_path}
+\alias{list_pkgs}
 \alias{configure_matlab}
 \alias{configure_conda}
 \alias{remove_conda}
@@ -22,6 +23,8 @@ conda_path()
 conda_bin()
 
 env_path()
+
+list_pkgs(...)
 
 configure_matlab(matlab, python_ver = "auto")
 
@@ -52,6 +55,10 @@ call_matlab(
 \item{env_name}{alternative environment name to use; default is
 \code{"rpymat-conda-env"}}
 
+\item{...}{for \code{add_packages}, these are additional parameters
+passing to \code{\link[reticulate]{conda_install}}; for
+\code{call_matlab}, \code{...} are the parameters passing to \code{fun}}
+
 \item{matlab}{'Matlab' path to add to the configuration path;
 see 'Details'}
 
@@ -69,10 +76,6 @@ works. Please see 'Configuration'.}
 This parameter should be true if your functions depend on
 \code{remove_conda} (see 'CRAN Repository Policy'). This argument might
 be removed and force to be interactive in the future.}
-
-\item{...}{for \code{add_packages}, these are additional parameters
-passing to \code{\link[reticulate]{conda_install}}; for
-\code{call_matlab}, \code{...} are the parameters passing to \code{fun}}
 
 \item{verbose}{whether to print messages}
 
