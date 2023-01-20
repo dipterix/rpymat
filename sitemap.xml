@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://dipterix.org/rpymat/404.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/authors.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/index.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/news/index.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/reference/conda-env.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/reference/jupyter.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/reference/repl_python.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/reference/run_command.html</loc>
+  </url>
+  <url>
+    <loc>http://dipterix.org/rpymat/reference/run_script.html</loc>
+  </url>
+</urlset>
