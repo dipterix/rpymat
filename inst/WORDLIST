@@ -1,6 +1,4 @@
 CMD
 Jupyter
-Mambaforge
 Miniconda
 conda
-reticulate

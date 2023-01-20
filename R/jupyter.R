@@ -52,7 +52,7 @@ add_jupyter <- function(..., register_R = TRUE){
   add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas", "jupyterlab"), ...)
   try({
     add_packages(packages = c("jupyterlab-git", "ipywidgets", "jupyter-server-proxy"), channel = "conda-forge")
-    add_packages(c('jupyterlab_latex', 'jupyterlab_github', 'matlab_kernel'), pip = TRUE)
+    # add_packages(c('jupyterlab_latex', 'jupyterlab_github', 'matlab_kernel'), pip = TRUE)
   })
   if(register_R && system.file("kernelspec", package = "IRkernel") != ""){
     jupyter_register_R(...)

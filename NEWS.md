@@ -1,3 +1,11 @@
+# rpymat 0.1.4
+
+* Muffled `conda` information when running `Python` code or scripts
+* Ported `reticulate::repl_python` function
+* Allowed users to list installed packages
+* Allowed `jupyter` to run in background in `RStudio` jobs
+* Removed optional `jupyter` add-on packages from the installation script
+
 # rpymat 0.1.3
 
 * Fixed command-line script failing to load `conda`

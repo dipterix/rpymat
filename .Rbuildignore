@@ -7,3 +7,6 @@
 ^CRAN-RELEASE$
 ^\.ipynb_checkpoints$
 ^CRAN-SUBMISSION$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
