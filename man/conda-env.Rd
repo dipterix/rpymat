@@ -105,7 +105,7 @@ environment will not affect your other set ups.
 Since 2014, 'Matlab' has introduced its official compiler for \code{python}.
 The package \code{rpymat} provides a simple approach to link the
 compiler, provided that you have proper versions of 'Matlab' installed.
-\href{https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf}{Here} is a list of
+\href{https://www.mathworks.com/support/requirements/python-compatibility.html}{Here} is a list of
 'Matlab' versions with official compilers and their corresponding
 \code{python} versions.
 }
