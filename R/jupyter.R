@@ -226,9 +226,6 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
   }
 
   if(async && !dry_run){
-    if(!rstudioapi::isAvailable("1.4", child_ok = TRUE)){
-      stop("`async=TRUE` option only runs in RStudio (>=1.4)")
-    }
     tf <- tempfile()
 
     expr <- bquote({
@@ -239,15 +236,23 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
 
     writeLines(deparse(expr), con = tf)
 
-    rstudioapi::jobRunScript(tf, name = "JupyterLab Server", workingDir = workdir, importEnv = NULL, exportEnv = "")
-    try({
-      rstudioapi::executeCommand("activateConsole", quiet = TRUE)
-    }, silent = TRUE)
+    if( rstudioapi::isAvailable("1.4", child_ok = TRUE) ) {
+
+      rstudioapi::jobRunScript(tf, name = "JupyterLab Server", workingDir = workdir, importEnv = NULL, exportEnv = "")
+      try({
+        rstudioapi::executeCommand("activateConsole", quiet = TRUE)
+      }, silent = TRUE)
+
+    } else {
+      run_rscript(script = tf, wait = FALSE)
+    }
+
   } else {
     run_command(command, workdir = workdir, env_list = env_list,
                 env = env, wait = TRUE, dry_run = dry_run)
   }
 
+  return(invisible())
   # run_command(sprintf("%s --config-dir", shQuote(jupyter_bin(), type = "cmd")), workdir = workdir, env = sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd")), )
 }
 
@@ -278,7 +283,8 @@ jupyter_check_launch <- function(port = 8888, host = "127.0.0.1",
     }
   })
   if(identical(async, "auto")){
-    async <- rstudioapi::isAvailable("1.4", child_ok = TRUE)
+    # async <- rstudioapi::isAvailable("1.4", child_ok = TRUE)
+    async <- TRUE
   } else {
     async <- as.logical(async)
   }

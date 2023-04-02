@@ -53,12 +53,8 @@ rpymat::jupyter_launch(async = FALSE)
 #### Advanced configurations:
 
 ```r
-# Async option is only available in RStudio >= 1.4
-async <- rstudioapi::isAvailable(version_needed = "1.4")
-
-
 rpymat::jupyter_launch(
-    async = async, workdir = "~",
+    async = TRUE, workdir = "~",
     port = 18888, open_browser = TRUE,
     token = "IwontTellYouMyToken"
 )
