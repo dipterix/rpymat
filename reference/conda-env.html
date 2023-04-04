@@ -12,7 +12,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rpymat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
 <span></span>
 <span><span class="fu">add_packages</span><span class="op">(</span>packages <span class="op">=</span> <span class="cn">NULL</span>, python_ver <span class="op">=</span> <span class="st">"auto"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ensure_rpymat</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">ensure_rpymat</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span>, cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">matlab_engine</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -135,6 +135,10 @@ be removed and force to be interactive in the future.</p></dd>
 
 <dt>verbose</dt>
 <dd><p>whether to print messages</p></dd>
+
+
+<dt>cache</dt>
+<dd><p>whether to use cached configurations; default is true</p></dd>
 
 
 <dt>fun</dt>

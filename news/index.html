@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rpymat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,14 @@
       <small>Source: <a href="https://github.com/dipterix/rpymat/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.5" id="rpymat-015">rpymat 0.1.5<a class="anchor" aria-label="anchor" href="#rpymat-015"></a></h2>
+<ul><li>Added <code>choose_directory</code>, <code>choose_fileopen</code>, <code>choose_filesave</code> to select files using either base <code>R</code> or <code>Python</code> (via <code>tcl-tk</code> but with better interface on <code>osx</code>)</li>
+<li>Ported <code>reticulate</code> functions to convert between <code>R</code> and <code>Python</code> objects</li>
+<li>Allowed to set <code>conda</code> to installed version via system environment <code>R_RPYMAT_CONDA_EXE</code> and <code>R_RPYMAT_CONDA_PREFIX</code>; this change will allow <code>conda-forge</code> library <code>r-rpymat</code> to use already-installed <code>conda</code>
+</li>
+<li>Speed-up <code>ensure_rpymat</code> by caching the configuration</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="rpymat-014">rpymat 0.1.4<a class="anchor" aria-label="anchor" href="#rpymat-014"></a></h2><p class="text-muted">CRAN release: 2023-01-21</p>
 <ul><li>Muffled <code>conda</code> information when running <code>Python</code> code or scripts</li>
