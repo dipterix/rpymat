@@ -8,6 +8,9 @@
 #' @param verbose whether to verbose debug information
 #' @param force whether to force using \code{'Python'} when native \code{R}
 #' functions are available, default is false
+#' @return User-selected paths. If the users select nothing, then \code{NULL}
+#' will be returned. For multiple file selection, multiple paths will
+#' be returned.
 #' @details
 #' Base-R has \code{\link{file.choose}} function to choose files. However,
 #' users cannot select multiple files nor directories. These functions fill

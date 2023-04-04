@@ -37,6 +37,11 @@ choose_directory(
 \item{force}{whether to force using \code{'Python'} when native \code{R}
 functions are available, default is false}
 }
+\value{
+User-selected paths. If the users select nothing, then \code{NULL}
+will be returned. For multiple file selection, multiple paths will
+be returned.
+}
 \description{
 Choose a directory, one or multiple files to open, or choose a file to save.
 }

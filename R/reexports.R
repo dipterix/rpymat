@@ -13,7 +13,7 @@
 #' \code{'reticulate'} functions as data inputs
 #' @param name,silent,key,value,default other parameters passing to the
 #' \code{'reticulate'} functions
-#' @returns \code{'Python'} built-in objects
+#' @return \code{'Python'} built-in objects
 #' @examples
 #'
 #' library(rpymat)
