@@ -38,7 +38,7 @@ choose_fileopen <- function(
     initialfile <- NULL
   } else {
     initialfile <- normalizePath(initialfile, mustWork = FALSE)
-    initialfile <- gsub("\\\\", "\\\\\\\\", initialfile)
+    initialfile <- gsub("\\\\", "/", initialfile)
   }
 
   multiple <- isTRUE(as.logical(multiple))
@@ -91,12 +91,13 @@ choose_directory <- function(
     initialdir <- getwd()
   }
   initialdir <- normalizePath(initialdir, mustWork = FALSE)
-  initialdir <- gsub("\\\\", "\\\\\\\\", initialdir)
+  initialdir <- gsub("\\\\", "/", initialdir)
 
   title <- as.character(title)
   message <- as.character(message)
 
   # DIPSAUS DEBUG START
+  # devtools::load_all()
   # title = "Choose a Directory"
   # message = title
   # initialdir = "."
@@ -106,6 +107,7 @@ choose_directory <- function(
   # script <- glue::glue(template_script, .envir = env,
   #                      .open = "{{", .close = "}}", .trim = TRUE, .null = "None")
   # script
+  # verbose = TRUE
 
   re <- run_template(
     system.file(package = "rpymat", "py_templates", "choose-dir.py"),

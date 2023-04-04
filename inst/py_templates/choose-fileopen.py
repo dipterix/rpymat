@@ -1,3 +1,4 @@
+import os
 from tkinter import Tk
 from tkinter.filedialog import askopenfilenames, askopenfilename
 Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
@@ -25,7 +26,6 @@ initialfile = "{{ initialfile }}"
 if initialfile == "{%s}" % '''{ initialfile }''' or initialfile == "None":
   initialfile = None
 else:
-  import os
   initialfile = os.path.abspath(initialfile)
   if os.path.isdir(initialfile):
     initialdir = initialfile
@@ -36,10 +36,23 @@ else:
 
 
 # -defaultextension, -filetypes, -initialdir, -initialfile, -message, -multiple, -parent, -title, -typevariable, or -command
-if multiple:
-  path = askopenfilenames(title=title, message=message, initialdir=initialdir, initialfile = initialfile)
-else:
-  path = askopenfilename(title=title, message=message, initialdir=initialdir, initialfile = initialfile)
+# -defaultextension, -filetypes, -initialdir, -initialfile, -multiple, -parent, -title, or -typevariable
+try:
+  if os.name == "nt":
+    if multiple:
+      path = askopenfilenames(title=title, initialdir=initialdir, initialfile = initialfile)
+    else:
+      path = askopenfilename(title=title,initialdir=initialdir, initialfile = initialfile)
+  else:
+    if multiple:
+      path = askopenfilenames(title=title, message=message, initialdir=initialdir, initialfile = initialfile)
+    else:
+      path = askopenfilename(title=title, message=message, initialdir=initialdir, initialfile = initialfile)
+except Exception:
+  if multiple:
+    path = askopenfilenames(initialdir=initialdir, initialfile = initialfile)
+  else:
+    path = askopenfilename(initialdir=initialdir, initialfile = initialfile)
 
 print("RPYMAT_RESULT_START")
 if isinstance(path, str):
