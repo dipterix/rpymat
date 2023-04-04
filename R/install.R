@@ -10,6 +10,7 @@
 #' @param force whether to force install the 'Miniconda' even a previous
 #' version exists; default is false. Setting \code{false=TRUE} rarely
 #' works. Please see 'Configuration'.
+#' @param cache whether to use cached configurations; default is true
 #' @param env_name alternative environment name to use; default is
 #' \code{"rpymat-conda-env"}
 #' @param ask whether to ask for user's agreement to remove the repository.
@@ -480,49 +481,62 @@ BLAS_path <- function(){
 
 #' @rdname conda-env
 #' @export
-ensure_rpymat <- function(verbose = TRUE){
-  set_conda(temporary = FALSE)
+ensure_rpymat <- local({
 
-  if(!dir.exists(env_path())) {
-    configure_conda()
-  }
-
+  conf <- NULL
+  conda_prefix <- NULL
   blas <- NULL
-  if(get_os() == "windows"){
-    # C:\Users\KickStarter\AppData\Local\r-rpymat\miniconda\python.exe
-    python_bin <- normalizePath(file.path(env_path(), "python.exe"), winslash = "\\")
-  } else {
-    python_bin <- normalizePath(file.path(env_path(), 'bin', "python"))
 
-    # Also there are some inconsistency between BLAS used in R and conda packages
-    # Mainly on OSX (because Apple dropped libfortran), but not limited
-    # https://github.com/rstudio/reticulate/issues/456#issuecomment-1046045432
-    omp_threads <- Sys.getenv("OMP_NUM_THREADS", unset = NA)
-    if(is.na(omp_threads)){
-      Sys.setenv("OMP_NUM_THREADS" = "1")
-    }
-    # Find OPENBLAS library
-    blas <- BLAS_path()
-    if(length(blas)){
-      Sys.setenv(OPENBLAS = blas)
+  function(verbose = TRUE, cache = TRUE){
+    set_conda(temporary = FALSE)
+
+    if(
+      !cache || !inherits(conf, "py_config") ||
+      !identical(conda_prefix, Sys.getenv("R_RPYMAT_CONDA_PREFIX", unset = ""))
+    ) {
+      if(!dir.exists(env_path())) {
+        configure_conda()
+      }
+
+      if(get_os() == "windows"){
+        # C:\Users\KickStarter\AppData\Local\r-rpymat\miniconda\python.exe
+        python_bin <- normalizePath(file.path(env_path(), "python.exe"), winslash = "\\")
+      } else {
+        python_bin <- normalizePath(file.path(env_path(), 'bin', "python"))
+
+        # Also there are some inconsistency between BLAS used in R and conda packages
+        # Mainly on OSX (because Apple dropped libfortran), but not limited
+        # https://github.com/rstudio/reticulate/issues/456#issuecomment-1046045432
+        omp_threads <- Sys.getenv("OMP_NUM_THREADS", unset = NA)
+        if(is.na(omp_threads)){
+          Sys.setenv("OMP_NUM_THREADS" = "1")
+        }
+        # Find OPENBLAS library
+        blas <<- BLAS_path()
+        if(length(blas)){
+          Sys.setenv(OPENBLAS = blas)
+        }
+
+      }
+
+      Sys.setenv("RETICULATE_PYTHON" = python_bin)
+
+
+      # reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
+      # reticulate::py_config()
+      conf <<- reticulate::py_discover_config(use_environment = env_path())
+      conda_prefix <<- Sys.getenv("R_RPYMAT_CONDA_PREFIX", unset = "")
     }
 
+    if(verbose){
+      print(conf)
+      if(length(blas)){
+        cat("\nOPENBLAS =", blas, "\n")
+      }
+    }
+    invisible(conf)
   }
-
-  Sys.setenv("RETICULATE_PYTHON" = python_bin)
-
-
-  # reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
-  # reticulate::py_config()
-  conf <- reticulate::py_discover_config(use_environment = env_path())
-  if(verbose){
-    print(conf)
-    if(length(blas)){
-      cat("\nOPENBLAS =", blas, "\n")
-    }
-  }
-  invisible(conf)
-}
+})
 
 #' @rdname conda-env
 #' @export

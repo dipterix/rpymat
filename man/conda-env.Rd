@@ -40,7 +40,7 @@ remove_conda(ask = TRUE)
 
 add_packages(packages = NULL, python_ver = "auto", ...)
 
-ensure_rpymat(verbose = TRUE)
+ensure_rpymat(verbose = TRUE, cache = TRUE)
 
 matlab_engine()
 
@@ -78,6 +78,8 @@ This parameter should be true if your functions depend on
 be removed and force to be interactive in the future.}
 
 \item{verbose}{whether to print messages}
+
+\item{cache}{whether to use cached configurations; default is true}
 
 \item{fun}{'Matlab' function name, character (experimental)}
 
