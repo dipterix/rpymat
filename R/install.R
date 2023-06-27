@@ -365,7 +365,7 @@ configure_conda <- function(python_ver = "auto",
   if(!conda_is_user_defined() && (dir.exists(path) && !force)){
     stop("conda path already exists. Please consider removing it by calling `rpymat::remove_conda()`")
   }
-  if(conda_is_user_defined() && (force || update || !dir.exists(path))){
+  if(!conda_is_user_defined() && (force || update || !dir.exists(path))){
     miniconda_installer_url()
     tryCatch({
       reticulate::install_miniconda(path = path, update = update, force = force)
