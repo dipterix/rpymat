@@ -406,8 +406,8 @@ configure_conda <- function(python_ver = "auto",
 
 
 conda_is_user_defined <- function() {
-  actual_root <- normalizePath(dirname(conda_path()), mustWork = FALSE)
-  root <- normalizePath(install_root(), mustWork = FALSE)
+  actual_root <- normalizePath(conda_path(), mustWork = FALSE, winslash = "/")
+  root <- normalizePath(file.path(install_root(), "miniconda"), mustWork = FALSE, winslash = "/")
   !identical(actual_root, root)
 }
 
