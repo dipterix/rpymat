@@ -200,7 +200,12 @@ set_conda <- function(temporary = TRUE){
   if(old_path == ""){
     old_path <- getOption("reticulate.conda_binary", "")
   }
-  if(temporary && old_path != ""){
+  if(
+    temporary && length(old_path) == 1 && old_path != "" &&
+    tryCatch({
+      isTRUE(file.exists(old_path))
+    }, error = function(e) { FALSE })
+  ){
     parent_env <- parent.frame()
     do.call(on.exit, list(bquote({
       options("reticulate.conda_binary" = .(getOption("reticulate.conda_binary", "")))
@@ -216,6 +221,8 @@ set_conda <- function(temporary = TRUE){
   conda_path <- conda_path[file.exists(conda_path)]
   if(length(conda_path)){
     options("reticulate.conda_binary" = conda_path[[1]])
+  } else {
+    options("reticulate.conda_binary" = NULL)
   }
 }
 
@@ -399,7 +406,7 @@ configure_conda <- function(python_ver = "auto",
 
 
 conda_is_user_defined <- function() {
-  actual_root <- normalizePath(file.path(conda_path(), ".."), mustWork = FALSE)
+  actual_root <- normalizePath(dirname(conda_path()), mustWork = FALSE)
   root <- normalizePath(install_root(), mustWork = FALSE)
   !identical(actual_root, root)
 }
