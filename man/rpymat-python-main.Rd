@@ -20,6 +20,8 @@ The 'Python' main process as a module
 }
 \examples{
 
+if(interactive() && dir.exists(env_path())) {
+
 py_no_convert <- rpymat::import_main(convert = FALSE)
 
 py$a <- matrix(seq_len(16), 4)
@@ -27,6 +29,8 @@ py$a <- matrix(seq_len(16), 4)
 py_no_convert$a
 
 py$a
+
+}
 
 }
 \keyword{datasets}

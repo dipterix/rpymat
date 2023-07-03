@@ -18,7 +18,7 @@ Slice index in 'Python' arrays
 \examples{
 
 
-if(interactive() && ants_available()) {
+if(interactive() && dir.exists(env_path())) {
 
   x <- np_array(array(seq(20), c(4, 5)))
 

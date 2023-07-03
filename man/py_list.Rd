@@ -20,7 +20,7 @@ List in 'Python'
 \examples{
 
 
-if(interactive() && ants_available()) {
+if(interactive() && dir.exists(env_path())) {
 
   py_list(list(1,2,3))
   py_list(c(1,2,3))

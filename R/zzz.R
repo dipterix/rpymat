@@ -12,6 +12,8 @@ rpymat_is_setup <- function() {
 #' @returns The 'Python' main process as a module
 #' @examples
 #'
+#' if(interactive() && dir.exists(env_path())) {
+#'
 #' py_no_convert <- rpymat::import_main(convert = FALSE)
 #'
 #' py$a <- matrix(seq_len(16), 4)
@@ -19,6 +21,8 @@ rpymat_is_setup <- function() {
 #' py_no_convert$a
 #'
 #' py$a
+#'
+#' }
 #'
 #' @export
 "py"

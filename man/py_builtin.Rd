@@ -19,11 +19,11 @@ Get 'Python' built-in object
 }
 \examples{
 
-if(interactive() && ants_available()) {
+if(interactive() && dir.exists(env_path())) {
 
 
 # ------ Basic case: use python `int` as an R function ---------
-py_int <- py_builtin("int")
+py_int <- py_builtin("int", convert = TRUE)
 
 # a is an R object now
 a <- py_int(9)

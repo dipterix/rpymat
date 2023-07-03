@@ -4,11 +4,11 @@
 #' @returns A python built-in object specified by \code{name}
 #' @examples
 #'
-#' if(interactive() && ants_available()) {
+#' if(interactive() && dir.exists(env_path())) {
 #'
 #'
 #' # ------ Basic case: use python `int` as an R function ---------
-#' py_int <- py_builtin("int")
+#' py_int <- py_builtin("int", convert = TRUE)
 #'
 #' # a is an R object now
 #' a <- py_int(9)
@@ -46,7 +46,7 @@ py_builtin <- function(name, convert = FALSE) {
 #' @examples
 #'
 #'
-#' if(interactive() && ants_available()) {
+#' if(interactive() && dir.exists(env_path())) {
 #'
 #'   x <- np_array(array(seq(20), c(4, 5)))
 #'
@@ -68,7 +68,7 @@ py_slice <- function(...) {
 #' @examples
 #'
 #'
-#' if(interactive() && ants_available()) {
+#' if(interactive() && dir.exists(env_path())) {
 #'
 #'   py_list(list(1,2,3))
 #'   py_list(c(1,2,3))
