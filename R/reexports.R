@@ -1,3 +1,6 @@
+#' @export
+glue::glue
+
 #' @name reticulate-reexports
 #' @title Wrappers around \code{'reticulate'} package
 #' @description Almost the same with \code{'reticulate'} functions, with

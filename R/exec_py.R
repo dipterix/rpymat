@@ -1,9 +1,12 @@
+#' @name run_pyscript
 #' @title Run 'Python' script
 #' @description A wrapper of \code{\link[reticulate]{py_run_file}},
 #' but with \code{rpymat} enabled
-#' @param x script path
+#' @param x 'Python' script path
+#' @param code 'Python' code
 #' @param work_dir working directory of the script
 #' @param local,convert passed to \code{\link[reticulate]{py_run_file}}
+#' @param globals named list of global R variables used by 'Python' script
 #' @return The values returned by \code{\link[reticulate]{py_run_file}}
 #' @examples
 #'
@@ -25,7 +28,7 @@
 #' }
 #'
 #' @export
-run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE){
+run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE, globals = list()){
 
   if(length(work_dir) == 1 && dir.exists(work_dir)){
     `_cwd` <- getwd()
@@ -36,7 +39,47 @@ run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE){
 
   x <- normalizePath(x, mustWork = TRUE)
   ensure_rpymat(verbose = FALSE)
+
+  py <- import_main(convert = FALSE)
+  if(length(globals) > 0) {
+    lapply(names(globals), function(nm) {
+      if(trimws(nm) != "") {
+        py[[ nm ]] <- globals[[nm]]
+      } else {
+        stop("rpymat::run_script(..., globals) - `globals` must be a NAMED list.")
+      }
+    })
+  }
   reticulate::py_run_file(file = x, local = local, convert = convert)
+}
+
+#' @rdname run_pyscript
+#' @export
+run_pyscript <- run_script
+
+#' @rdname run_pyscript
+#' @export
+run_pystring <- function(code, work_dir = NULL, local = FALSE, convert = FALSE, globals = list()) {
+  if(length(work_dir) == 1 && dir.exists(work_dir)){
+    `_cwd` <- getwd()
+    on.exit({setwd(`_cwd`)}, add = TRUE, after = TRUE)
+    work_dir <- normalizePath(work_dir)
+    setwd(work_dir)
+  }
+
+  ensure_rpymat(verbose = FALSE)
+
+  py <- import_main(convert = FALSE)
+  if(length(globals) > 0) {
+    lapply(names(globals), function(nm) {
+      if(trimws(nm) != "") {
+        py[[ nm ]] <- globals[[nm]]
+      } else {
+        stop("rpymat::run_script(..., globals) - `globals` must be a NAMED list.")
+      }
+    })
+  }
+  return(reticulate::py_run_string(code = code, local = local, convert = convert))
 }
 
 #' Enable interactive 'python' from R
