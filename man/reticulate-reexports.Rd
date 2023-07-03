@@ -2,7 +2,9 @@
 % Please edit documentation in R/reexports.R
 \name{reticulate-reexports}
 \alias{reticulate-reexports}
+\alias{import_main}
 \alias{tuple}
+\alias{py_tuple}
 \alias{py_help}
 \alias{np_array}
 \alias{import}
@@ -25,7 +27,11 @@
 \alias{py_none}
 \title{Wrappers around \code{'reticulate'} package}
 \usage{
+import_main(convert = FALSE)
+
 tuple(..., convert = FALSE)
+
+py_tuple(..., convert = FALSE)
 
 py_help(object)
 

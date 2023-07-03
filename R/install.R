@@ -10,6 +10,8 @@
 #' @param force whether to force install the 'Miniconda' even a previous
 #' version exists; default is false. Setting \code{false=TRUE} rarely
 #' works. Please see 'Configuration'.
+#' @param standalone whether to install \code{conda} regardless of existing
+#' \code{conda} environment
 #' @param cache whether to use cached configurations; default is true
 #' @param env_name alternative environment name to use; default is
 #' \code{"rpymat-conda-env"}
@@ -344,10 +346,9 @@ auto_python_version <- function(matlab){
 
 #' @rdname conda-env
 #' @export
-configure_conda <- function(python_ver = "auto",
-                            packages = NULL,
-                            matlab = NULL,
-                            update = FALSE, force = FALSE){
+configure_conda <- function(
+    python_ver = "auto", packages = NULL, matlab = NULL, update = FALSE,
+    force = FALSE, standalone = FALSE){
 
   packages <- unique(c(packages, "numpy"))
 
@@ -369,10 +370,21 @@ configure_conda <- function(python_ver = "auto",
     }
   }
 
-  if(!conda_is_user_defined() && (dir.exists(path) && !force)){
+  if( dir.exists(path) && !conda_is_user_defined() && !force ) {
     stop("conda path already exists. Please consider removing it by calling `rpymat::remove_conda()`")
   }
-  if(!conda_is_user_defined() && (force || update || !dir.exists(path))){
+
+  miniconda_needs_install <- FALSE
+  if( force || update || !dir.exists(path) ) {
+    # needs install
+    miniconda_needs_install <- TRUE
+    if( !standalone && conda_is_user_defined() ) {
+      # rpymat is inside of a conda environment
+      miniconda_needs_install <- FALSE
+    }
+  }
+
+  if( miniconda_needs_install ){
     miniconda_installer_url()
     tryCatch({
       reticulate::install_miniconda(path = path, update = update, force = force)

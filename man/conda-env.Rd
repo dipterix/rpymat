@@ -33,7 +33,8 @@ configure_conda(
   packages = NULL,
   matlab = NULL,
   update = FALSE,
-  force = FALSE
+  force = FALSE,
+  standalone = FALSE
 )
 
 remove_conda(ask = TRUE)
@@ -71,6 +72,9 @@ see 'Details'}
 \item{force}{whether to force install the 'Miniconda' even a previous
 version exists; default is false. Setting \code{false=TRUE} rarely
 works. Please see 'Configuration'.}
+
+\item{standalone}{whether to install \code{conda} regardless of existing
+\code{conda} environment}
 
 \item{ask}{whether to ask for user's agreement to remove the repository.
 This parameter should be true if your functions depend on

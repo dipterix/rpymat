@@ -41,10 +41,22 @@ NULL
 
 #' @rdname reticulate-reexports
 #' @export
+import_main <- function(convert = FALSE) {
+  ensure_rpymat(verbose = FALSE)
+  return(reticulate::import_main(convert = convert))
+}
+
+
+#' @rdname reticulate-reexports
+#' @export
 tuple <- function (..., convert = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::tuple(convert = convert, ...))
 }
+
+#' @rdname reticulate-reexports
+#' @export
+py_tuple <- tuple
 
 #' @rdname reticulate-reexports
 #' @export
