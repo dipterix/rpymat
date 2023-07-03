@@ -7,7 +7,7 @@
 #' @param work_dir working directory of the script
 #' @param local,convert passed to \code{\link[reticulate]{py_run_file}}
 #' @param globals named list of global R variables used by 'Python' script
-#' @return The values returned by \code{\link[reticulate]{py_run_file}}
+#' @returns The values returned by \code{\link[reticulate]{py_run_file}}
 #' @examples
 #'
 #' \dontrun{
@@ -87,7 +87,7 @@ run_pystring <- function(code, work_dir = NULL, local = FALSE, convert = FALSE, 
 #' console for quick code evaluation or debugging.
 #' @param ... passed to \code{\link[reticulate]{repl_python}}
 #' in \code{'reticulate'} package
-#' @return See \code{\link[reticulate]{repl_python}}
+#' @returns See \code{\link[reticulate]{repl_python}}
 #' @export
 repl_python <- function(...) {
   ensure_rpymat(verbose = FALSE)

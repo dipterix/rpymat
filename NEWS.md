@@ -1,3 +1,9 @@
+# rpymat 0.1.6
+
+* Fixed an installation problem introduced in version `0.1.5`
+* Added utility functions for basic `Python` types
+* Added global variables in `run_pyscript`
+
 # rpymat 0.1.5
 
 * Added `choose_directory`, `choose_fileopen`, `choose_filesave` to select files using either base `R` or `Python` (via `tcl-tk` but with better interface on `osx`)

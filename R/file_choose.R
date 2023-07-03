@@ -8,7 +8,7 @@
 #' @param verbose whether to verbose debug information
 #' @param force whether to force using \code{'Python'} when native \code{R}
 #' functions are available, default is false
-#' @return User-selected paths. If the users select nothing, then \code{NULL}
+#' @returns User-selected paths. If the users select nothing, then \code{NULL}
 #' will be returned. For multiple file selection, multiple paths will
 #' be returned.
 #' @details

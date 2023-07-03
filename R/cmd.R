@@ -22,7 +22,7 @@
 #' @param suggest suggested shell type; default is \code{'cmd'} on windows,
 #' or \code{'bash'} on others
 #' @param env_list a key-value pairs of environment variables
-#' @return All the functions return a list with class
+#' @returns All the functions return a list with class
 #' \code{rpymat_system_command} except for
 #' \code{run_command}, which returns the exit code by \code{\link{system2}}.
 #'

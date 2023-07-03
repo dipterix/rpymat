@@ -26,7 +26,7 @@
 #' @param .options 'Matlab' compiler options
 #' @param .debug whether to enable debug mode
 #' @param verbose whether to print messages
-#' @return None
+#' @returns None
 #' @section Background & Objectives:
 #' Package \code{reticulate} provides sophisticated tool-sets that
 #' allow us to call \code{python} functions within \code{R}. However, the

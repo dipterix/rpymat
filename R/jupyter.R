@@ -12,7 +12,7 @@
 #' @param ... for \code{add_jupyter}, these are additional parameters passed to
 #' \code{jupyter_register_R}; for \code{jupyter_launch}, these are additional
 #' parameters passed to \code{jupyter_options}
-#' @return \code{jupyter_bin} returns the 'Jupyter' notebook binary path;
+#' @returns \code{jupyter_bin} returns the 'Jupyter' notebook binary path;
 #' \code{jupyter_options} returns the 'Jupyter' configuration in strings;
 #' \code{jupyter_server_list} returns a table of existing local 'Jupyter'
 #' server hosts, ports, and tokens; \code{jupyter_check_launch} returns true
