@@ -37,6 +37,9 @@
     <loc>http://dipterix.org/rpymat/reference/py_slice.html</loc>
   </url>
   <url>
+    <loc>http://dipterix.org/rpymat/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>http://dipterix.org/rpymat/reference/repl_python.html</loc>
   </url>
   <url>
@@ -49,6 +52,6 @@
     <loc>http://dipterix.org/rpymat/reference/run_command.html</loc>
   </url>
   <url>
-    <loc>http://dipterix.org/rpymat/reference/run_script.html</loc>
+    <loc>http://dipterix.org/rpymat/reference/run_pyscript.html</loc>
   </url>
 </urlset>
