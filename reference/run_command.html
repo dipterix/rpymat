@@ -164,13 +164,13 @@ is true</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">run_command</span><span class="op">(</span><span class="st">"conda install -y numpy"</span>, dry_run <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>path[1]="/home/runner/.local/share/r-rpymat/miniconda/condabin/conda/../..": Not a directory</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>path[1]="/usr/share/miniconda/bin/conda/../..": Not a directory</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> #!/usr/bin/env bash</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> cd '/home/runner/work/rpymat/rpymat/docs/reference'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> if [ -f "/home/runner/.local/share/r-rpymat/miniconda/condabin/conda/../../etc/profile.d/conda.sh" ]; then</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   . "/home/runner/.local/share/r-rpymat/miniconda/condabin/conda/../../etc/profile.d/conda.sh"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> if [ -f "/usr/share/miniconda/bin/conda/../../etc/profile.d/conda.sh" ]; then</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   . "/usr/share/miniconda/bin/conda/../../etc/profile.d/conda.sh"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> else</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   export PATH="/home/runner/.local/share/r-rpymat/miniconda/condabin/conda/../../bin:$PATH"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   export PATH="/usr/share/miniconda/bin/conda/../../bin:$PATH"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> fi</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> conda activate "/home/runner/.local/share/r-rpymat/miniconda/envs/rpymat-conda-env"</span>

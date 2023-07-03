@@ -71,28 +71,17 @@ import_main does not convert by default; see 'Examples' for details."><!-- mathj
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="conda-env.html">env_path</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">py_no_convert</span> <span class="op">&lt;-</span> <span class="fu">rpymat</span><span class="fu">::</span><span class="fu"><a href="reticulate-reexports.html">import_main</a></span><span class="op">(</span>convert <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> * Installing Miniconda -- please wait a moment ...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> * Downloading 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh' ...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + '/home/runner/.local/share/r-rpymat/miniconda/bin/conda' 'create' '--yes' '--name' 'r-reticulate' 'python=3.9' 'numpy' '--quiet' '-c' 'conda-forge'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> * Miniconda has been successfully installed at "~/.local/share/r-rpymat/miniconda".</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + '/home/runner/.local/share/r-rpymat/miniconda/bin/conda' 'create' '--yes' '--prefix' '/home/runner/.local/share/r-rpymat/miniconda/envs/rpymat-conda-env' 'python=3.9' '--quiet' '-c' 'conda-forge'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + '/home/runner/.local/share/r-rpymat/miniconda/bin/conda' 'install' '--yes' '--prefix' '/home/runner/.local/share/r-rpymat/miniconda/envs/rpymat-conda-env' '-c' 'conda-forge' 'numpy'</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">py</span><span class="op">$</span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">py_no_convert</span><span class="op">$</span><span class="va">a</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> array([[ 1,  5,  9, 13],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [ 2,  6, 10, 14],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [ 3,  7, 11, 15],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [ 4,  8, 12, 16]], dtype=int32)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">py</span><span class="op">$</span><span class="va">a</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    1    5    9   13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    2    6   10   14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    3    7   11   15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    4    8   12   16</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
