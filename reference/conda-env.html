@@ -12,7 +12,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rpymat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,8 @@
 <span>  packages <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  matlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  update <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  force <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  standalone <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">remove_conda</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -124,6 +125,11 @@ see 'Details'</p></dd>
 <dd><p>whether to force install the 'Miniconda' even a previous
 version exists; default is false. Setting <code>false=TRUE</code> rarely
 works. Please see 'Configuration'.</p></dd>
+
+
+<dt>standalone</dt>
+<dd><p>whether to install <code>conda</code> regardless of existing
+<code>conda</code> environment</p></dd>
 
 
 <dt>ask</dt>
