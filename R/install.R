@@ -387,6 +387,13 @@ configure_conda <- function(
   if( miniconda_needs_install ){
     miniconda_installer_url()
     tryCatch({
+
+      default_timeout <- getOption("timeout", 60)
+      options(timeout = 30*60)
+      on.exit({
+        options(timeout = default_timeout)
+      }, add = TRUE, after = TRUE)
+
       reticulate::install_miniconda(path = path, update = update, force = force)
     }, error = function(e){
       print(e)
