@@ -85,4 +85,30 @@ rand_string <- function (length = 50) {
         collapse = "")
 }
 
+package_installed <- function(pkg, ...) {
+  isTRUE(system.file(package = pkg, ..., mustWork = FALSE) != "")
+}
 
+run_package_function <- function(
+    ns, fun, ...,
+    .on_failure = c("error", "warning", "ignore")) {
+
+  .on_failure <- match.arg(.on_failure)
+
+  tryCatch({
+    withRestarts({
+      f <- asNamespace(ns)[[fun]]
+      if (!is.function(f)) {
+        stop(sprintf("Cannot find package function %s::%s", ns, fun))
+      }
+      return(f(...))
+    }, abort = function(...){})
+  }, error = function(e) {
+    if( .on_failure == "error" ) {
+      stop(e)
+    } else if( .on_failure == "warning" ) {
+      warning(e)
+    }
+    invisible(e)
+  })
+}
