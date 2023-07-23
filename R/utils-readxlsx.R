@@ -23,6 +23,7 @@ module_available <- function( module ) {
 #' choices are \code{'auto'} (automatically find proper method),
 #' \code{'pandas'} (use \code{pandas.read_xlsx}), or \code{'readxl'} (use the
 #' corresponding R package)
+#' @param n_max maximum number of rows (excluding headers) to read
 #' @param ... passed to 'Python' function \code{pandas.read_xlsx} or
 #' \code{readxl::read_excel}, depending on \code{method}
 #' @returns A \code{\link{data.frame}} table
@@ -39,7 +40,8 @@ module_available <- function( module ) {
 #'
 #'
 #' @export
-read_xlsx <- function(path, sheet = NULL, method = c("auto", "pandas", "readxl"), ...) {
+read_xlsx <- function(path, sheet = NULL, method = c("auto", "pandas", "readxl"),
+                      n_max = Inf, ...) {
 
   method <- match.arg(method)
 
@@ -75,6 +77,7 @@ read_xlsx <- function(path, sheet = NULL, method = c("auto", "pandas", "readxl")
       "read_excel",
       path = path,
       sheet = sheet,
+      n_max = n_max,
       ...,
       .on_failure = "error"
     )
@@ -92,8 +95,21 @@ read_xlsx <- function(path, sheet = NULL, method = c("auto", "pandas", "readxl")
 
   pandas <- import("pandas", convert = FALSE, delay_load = FALSE)
 
+  if(length(n_max) != 1 || !isTRUE(is.numeric(n_max)) ||
+     is.na(n_max) || is.infinite(n_max)) {
+    n_max <- NULL
+  } else {
+    n_max <- as.integer(n_max)
+    if(n_max < 0) { n_max <- 0L }
+  }
+
   # python starts from 0
-  df <- pandas$read_excel(io = normalizePath(path), sheet_name = as.integer(sheet - 1L))
+  df <- pandas$read_excel(
+    io = normalizePath(path),
+    sheet_name = as.integer(sheet - 1L),
+    nrows = n_max,
+    ...
+  )
   re <- py_to_r(df)
   return(re)
 }

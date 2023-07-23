@@ -4,7 +4,13 @@
 \alias{read_xlsx}
 \title{Read data frame from a \code{'xlsx'} file}
 \usage{
-read_xlsx(path, sheet = NULL, method = c("auto", "pandas", "readxl"), ...)
+read_xlsx(
+  path,
+  sheet = NULL,
+  method = c("auto", "pandas", "readxl"),
+  n_max = Inf,
+  ...
+)
 }
 \arguments{
 \item{path}{\code{'xlsx'} file path}
@@ -16,6 +22,8 @@ the number starts from \code{1}}
 choices are \code{'auto'} (automatically find proper method),
 \code{'pandas'} (use \code{pandas.read_xlsx}), or \code{'readxl'} (use the
 corresponding R package)}
+
+\item{n_max}{maximum number of rows (excluding headers) to read}
 
 \item{...}{passed to 'Python' function \code{pandas.read_xlsx} or
 \code{readxl::read_excel}, depending on \code{method}}
