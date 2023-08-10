@@ -6,6 +6,7 @@
 #' @param host,port 'IP' and port of the hosting 'URL'
 #' @param open_browser whether to open the browser once launched
 #' @param token access token of the notebook
+#' @param base_url base address, default is \code{'/jupyter/'}
 #' @param async whether to open the notebook in the background
 #' @param dry_run whether to display the command instead of executing them;
 #' used to debug the code
@@ -141,9 +142,16 @@ jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rpr
 }
 
 #' @rdname jupyter
-jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_browser = FALSE, token = rand_string()){
+jupyter_options <- function(
+    root_dir, host = "127.0.0.1", port = 8888, open_browser = FALSE,
+    token = rand_string(), base_url = "/jupyter/"){
   root_dir <- normalizePath(root_dir, winslash = "\\", mustWork = TRUE)
   root_dir <- gsub('\\\\', '\\\\\\\\', root_dir)
+
+  base_url <- trimws(gsub("[/|\\\\]{1,}", "/", base_url))
+  if(!startsWith(base_url, "/")) {
+    base_url <- sprintf("/%s", base_url)
+  }
 
   glue::glue(
     .sep = "\n",
@@ -153,7 +161,7 @@ jupyter_options <- function(root_dir, host = "127.0.0.1", port = 8888, open_brow
     'c.ServerApp.allow_origin = "*"',
     'c.ServerApp.port = {port}',
     sprintf('c.ServerApp.open_browser = %s', ifelse(isTRUE(open_browser), "True", "False")),
-    'c.ServerApp.base_url = "/jupyter/"',
+    'c.ServerApp.base_url = "{base_url}"',
     'c.ServerApp.token = "{token}"',
     'c.ServerApp.password = ""',
     'c.ServerApp.root_dir = "{root_dir}"',

@@ -32,7 +32,8 @@ jupyter_options(
   host = "127.0.0.1",
   port = 8888,
   open_browser = FALSE,
-  token = rand_string()
+  token = rand_string(),
+  base_url = "/jupyter/"
 )
 
 jupyter_launch(
@@ -76,6 +77,8 @@ parameters passed to \code{jupyter_options}}
 \item{open_browser}{whether to open the browser once launched}
 
 \item{token}{access token of the notebook}
+
+\item{base_url}{base address, default is \code{'/jupyter/'}}
 
 \item{async}{whether to open the notebook in the background}
 
