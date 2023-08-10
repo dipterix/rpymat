@@ -212,18 +212,13 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
   ), con = file.path(conf_dir, "custom", "custom.js"))
   # JUPYTER_CONFIG_DIR
 
-  quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
+  quoted_cmd <- shQuote(jupyter_bin())
   command <- c(
     sprintf("%s --paths", quoted_cmd),
     sprintf("%s lab", quoted_cmd)
   )
-  env <- sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir, type = "cmd"))
-
-  if(get_os() == "windows"){
-    env_list <- list(`JUPYTER_CONFIG_DIR` = conf_dir)
-  } else {
-    env_list <- list()
-  }
+  env <- sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir))
+  env_list <- list(`JUPYTER_CONFIG_DIR` = conf_dir)
 
   if(async && !dry_run){
     tf <- tempfile()
@@ -248,8 +243,11 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
     }
 
   } else {
-    run_command(command, workdir = workdir, env_list = env_list,
-                env = env, wait = TRUE, dry_run = dry_run)
+    re <- run_command(command, workdir = workdir, env_list = env_list,
+                      env = env, wait = TRUE, dry_run = dry_run)
+    if( dry_run ) {
+      return(re)
+    }
   }
 
   return(invisible())
