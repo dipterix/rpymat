@@ -285,7 +285,7 @@ run_command <- function(command, shell = detect_shell(),
   if(enable_conda){
     conda_bin <- conda_bin()
     if(length(conda_bin)) {
-      conda_path <- normalizePath(file.path(conda_bin, "..", ".."), winslash = "/")
+      conda_path <- normalizePath(dirname(dirname(conda_bin)), winslash = "/")
     } else {
       conda_path <- conda_path()
     }

@@ -49,7 +49,7 @@ NULL
 #' @rdname jupyter
 #' @export
 add_jupyter <- function(..., register_R = TRUE){
-  add_packages(packages = c("jupyter", "numpy", "h5py", "matplotlib", "pandas", "jupyterlab"), ...)
+  add_packages(packages = c("notebook", "numpy", "h5py", "matplotlib", "pandas", "jupyterlab"), channel = "conda-forge", ...)
   try({
     add_packages(packages = c("jupyterlab-git", "ipywidgets", "jupyter-server-proxy"), channel = "conda-forge")
     # add_packages(c('jupyterlab_latex', 'jupyterlab_github', 'matlab_kernel'), pip = TRUE)
