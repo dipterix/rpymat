@@ -156,13 +156,13 @@ jupyter_options <- function(
   glue::glue(
     .sep = "\n",
     # 'c.GatewayClient.url = "http://{host}:{port+1}"',
-
+    'import os',
     'c.ServerApp.ip = "{host}"',
     'c.ServerApp.allow_origin = "*"',
     'c.ServerApp.port = {port}',
     sprintf('c.ServerApp.open_browser = %s', ifelse(isTRUE(open_browser), "True", "False")),
     'c.ServerApp.base_url = "{base_url}"',
-    'c.ServerApp.token = "{token}"',
+    'c.ServerApp.token = os.getenv("JUPYTER_TOKEN", "{token}")',
     'c.ServerApp.password = ""',
     'c.ServerApp.root_dir = "{root_dir}"',
 
