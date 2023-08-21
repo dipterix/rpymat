@@ -1,3 +1,12 @@
+# rpymat 0.1.7
+
+* Set longer time-out when installing `conda`
+* Allow to read `xlsx` from `pandas` (if user choose to install)
+* Fixed a command issue on `linux` where dot-dot cannot be used on file path to get the parent directory; using R's built-in `dirname` instead
+* Fixed a `jupyter` dry-run issue
+* Allowed to set base `URL` for `jupyter`
+* Allow to manually override `jupyter` token with `JUPYTER_TOKEN` environment variable instead of randomly-generated tokens. This setting is mainly designed for docker.
+
 # rpymat 0.1.6
 
 * Fixed an installation problem introduced in version `0.1.5`
