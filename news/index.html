@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rpymat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,17 @@
       <small>Source: <a href="https://github.com/dipterix/rpymat/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.7" id="rpymat-017">rpymat 0.1.7<a class="anchor" aria-label="anchor" href="#rpymat-017"></a></h2>
+<ul><li>Set longer time-out when installing <code>conda</code>
+</li>
+<li>Allow to read <code>xlsx</code> from <code>pandas</code> (if user choose to install)</li>
+<li>Fixed a command issue on <code>linux</code> where dot-dot cannot be used on file path to get the parent directory; using R’s built-in <code>dirname</code> instead</li>
+<li>Fixed a <code>jupyter</code> dry-run issue</li>
+<li>Allowed to set base <code>URL</code> for <code>jupyter</code>
+</li>
+<li>Allow to manually override <code>jupyter</code> token with <code>JUPYTER_TOKEN</code> environment variable instead of randomly-generated tokens. This setting is mainly designed for docker.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.6" id="rpymat-016">rpymat 0.1.6<a class="anchor" aria-label="anchor" href="#rpymat-016"></a></h2><p class="text-muted">CRAN release: 2023-07-03</p>
 <ul><li>Fixed an installation problem introduced in version <code>0.1.5</code>
