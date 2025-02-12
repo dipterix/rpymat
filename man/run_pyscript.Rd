@@ -19,7 +19,10 @@ run_pyscript(
   work_dir = NULL,
   local = FALSE,
   convert = FALSE,
-  globals = list()
+  globals = list(),
+  env_name = NA,
+  force_child_process = FALSE,
+  ...
 )
 
 run_pystring(
@@ -38,6 +41,24 @@ run_pystring(
 \item{local, convert}{passed to \code{\link[reticulate]{py_run_file}}}
 
 \item{globals}{named list of global R variables used by 'Python' script}
+
+\item{env_name}{\code{'conda'} environment name to activate, if not default.
+It is only recommended for advanced users. For easier handling cases, use
+\code{\link{ensure_rpymat}} to activate the environment before calling
+'Python'. If \code{env_name} is set other than activated, the evaluation will
+occur in a separate session (\code{force_child_process} is always set to true
+in such case).}
+
+\item{force_child_process}{whether to force running the script in a separated
+process; default is \code{FALSE}}
+
+\item{...}{passed to internal calls; some useful arguments include
+\describe{
+\item{\code{rs}}{\code{logical(1)}, whether to attempt using 'RStudio'
+background job to run the script; default is \code{FALSE}}
+\item{\code{args}}{logical(1), only used when \code{rs} is false,
+passed to \code{\link{system2}}}
+}}
 
 \item{code}{'Python' code}
 }

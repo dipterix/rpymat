@@ -112,3 +112,24 @@ run_package_function <- function(
     invisible(e)
   })
 }
+
+
+rpymat_has_version <- function(min = NA) {
+  if(system.file(package = "rpymat") == "") { return(FALSE) }
+  if(is.na(min)) { return(TRUE) }
+
+  rpymat_ver <- utils::packageVersion("rpymat")
+  if( utils::compareVersion(as.character(rpymat_ver), min) < 0 ) {
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+#' Whether supports customized \code{'conda'} environment
+#' @returns true or false on whether multiple customized environment is
+#' supported
+#' @export
+custom_env_support <- function() {
+  rpymat_has_version("0.1.7.1")
+}

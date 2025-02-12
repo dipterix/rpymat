@@ -22,9 +22,9 @@ conda_path()
 
 conda_bin()
 
-env_path()
+env_path(env_name = NA)
 
-list_pkgs(...)
+list_pkgs(..., env_name = NA)
 
 configure_matlab(matlab, python_ver = "auto")
 
@@ -34,14 +34,15 @@ configure_conda(
   matlab = NULL,
   update = FALSE,
   force = FALSE,
-  standalone = FALSE
+  standalone = FALSE,
+  env_name = CONDAENV_NAME()
 )
 
-remove_conda(ask = TRUE)
+remove_conda(ask = TRUE, env_name = NA)
 
-add_packages(packages = NULL, python_ver = "auto", ...)
+add_packages(packages = NULL, python_ver = "auto", ..., env_name = NA)
 
-ensure_rpymat(verbose = TRUE, cache = TRUE)
+ensure_rpymat(verbose = TRUE, cache = TRUE, env_name = NA)
 
 matlab_engine()
 

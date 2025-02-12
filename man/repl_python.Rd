@@ -4,11 +4,15 @@
 \alias{repl_python}
 \title{Enable interactive 'python' from R}
 \usage{
-repl_python(...)
+repl_python(..., env_name = NA)
 }
 \arguments{
 \item{...}{passed to \code{\link[reticulate]{repl_python}}
 in \code{'reticulate'} package}
+
+\item{env_name}{environment name to activate, if not default. This argument
+is ignored if any other environment is activated; see
+\code{\link{ensure_rpymat}}.}
 }
 \value{
 See \code{\link[reticulate]{repl_python}}

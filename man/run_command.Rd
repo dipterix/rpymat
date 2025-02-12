@@ -38,7 +38,8 @@ run_command(
   workdir = getwd(),
   dry_run = FALSE,
   print_cmd = dry_run,
-  glue_env = parent.frame()
+  glue_env = parent.frame(),
+  env_name = NA
 )
 }
 \arguments{
@@ -77,6 +78,8 @@ returns the command), useful to debug}
 
 \item{glue_env, .env}{the environment to evaluate variables when \code{use_glue}
 is true}
+
+\item{env_name}{\code{'conda'} environment name to activate, if not default.}
 }
 \value{
 All the functions return a list with class

@@ -120,6 +120,22 @@ CONDAENV_NAME <- local({
   }
 })
 
+clean_env_name <- function(env_name) {
+  if(length(env_name) != 1 || is.na(env_name)) {
+    env_name <- ""
+  }
+  env_name <- trimws(env_name)
+  env_name <- gsub("[^a-zA-Z0-9_]+", "-", env_name)
+  env_name <- gsub("^[^a-zA-Z]+", "", env_name)
+  if( env_name == "" ) {
+    env_name <- ensure_rpymat_internals$name()
+  }
+  if(!length(env_name)) {
+    env_name <- CONDAENV_NAME()
+  }
+  env_name
+}
+
 install_root <- function(){
   if(Sys.info()["sysname"] == "Darwin"){
     path <- path.expand("~/Library/r-rpymat")
@@ -168,20 +184,22 @@ conda_bin <- function(){
 
 #' @rdname conda-env
 #' @export
-env_path <- function(){
+env_path <- function(env_name = NA){
 
   current_env <- Sys.getenv("R_RPYMAT_CONDA_PREFIX", unset = "")
   conda_exe <- Sys.getenv("R_RPYMAT_CONDA_EXE", unset = "")
 
+  env_name <- clean_env_name(env_name)
+
   re <- NULL
   if(!identical(current_env, "")) {
-    re <- file.path(dirname(current_env), CONDAENV_NAME())
+    re <- file.path(dirname(current_env), env_name)
   } else if( !identical(conda_exe, "") ) {
-    re <- file.path(dirname(dirname(conda_exe)), 'envs', CONDAENV_NAME())
+    re <- file.path(dirname(dirname(conda_exe)), 'envs', env_name)
   }
 
   if(length(re) != 1) {
-    re <- file.path(install_root(), "miniconda", 'envs', CONDAENV_NAME())
+    re <- file.path(install_root(), "miniconda", 'envs', env_name)
   }
 
   return( normalizePath(
@@ -193,8 +211,8 @@ env_path <- function(){
 
 #' @rdname conda-env
 #' @export
-list_pkgs <- function(...) {
-  reticulate::py_list_packages(envname = env_path(), ...)
+list_pkgs <- function(..., env_name = NA) {
+  reticulate::py_list_packages(envname = env_path(env_name = env_name), ...)
 }
 
 set_conda <- function(temporary = TRUE){
@@ -348,7 +366,7 @@ auto_python_version <- function(matlab){
 #' @export
 configure_conda <- function(
     python_ver = "auto", packages = NULL, matlab = NULL, update = FALSE,
-    force = FALSE, standalone = FALSE){
+    force = FALSE, standalone = FALSE, env_name = CONDAENV_NAME()){
 
   packages <- unique(c(packages, "numpy"))
 
@@ -371,7 +389,9 @@ configure_conda <- function(
   }
 
   if( dir.exists(path) && !conda_is_user_defined() && !force ) {
-    stop("conda path already exists. Please consider removing it by calling `rpymat::remove_conda()`")
+    if( identical(env_name, CONDAENV_NAME()) ) {
+      stop("conda path already exists. Please consider removing it by calling `rpymat::remove_conda()`")
+    }
   }
 
   miniconda_needs_install <- FALSE
@@ -404,11 +424,11 @@ configure_conda <- function(
   }
 
   # create virtual env
-  if(force || update || !CONDAENV_NAME() %in% reticulate::conda_list()[['name']]){
+  if(force || update || !env_name %in% reticulate::conda_list()[['name']]){
     if( isTRUE(python_ver == "auto") ){
-      reticulate::conda_create(env_path())
+      reticulate::conda_create(env_path(env_name = env_name))
     } else {
-      reticulate::conda_create(env_path(), python_version = python_ver)
+      reticulate::conda_create(env_path(env_name = env_name), python_version = python_ver)
     }
   }
 
@@ -418,7 +438,7 @@ configure_conda <- function(
   }
 
   if(!length(matlab) || length(packages)) {
-    add_packages(packages, python_ver)
+    add_packages(packages, python_ver, env_name = env_name)
   }
   error <- FALSE
 }
@@ -432,13 +452,13 @@ conda_is_user_defined <- function() {
 
 #' @rdname conda-env
 #' @export
-remove_conda <- function(ask = TRUE){
+remove_conda <- function(ask = TRUE, env_name = NA){
   if(!interactive()){
     stop("Must run in interactive mode")
   }
 
   if(conda_is_user_defined()) {
-    envpath <- env_path()
+    envpath <- env_path(env_name = env_name)
     if( !dir.exists(envpath) ){ return(invisible()) }
     if( ask ){
       message(sprintf("Removing conda at %s? \nThis operation only affects `rpymat` package and is safe.", envpath))
@@ -451,7 +471,7 @@ remove_conda <- function(ask = TRUE){
       }
     }
 
-    system2(conda_bin(), args = c(sprintf("remove --name %s --all --yes", shQuote(CONDAENV_NAME()))))
+    system2(conda_bin(), args = c(sprintf("remove --name %s --all --yes", shQuote(env_name))))
 
   } else {
     root <- normalizePath(install_root(), mustWork = FALSE)
@@ -475,7 +495,7 @@ remove_conda <- function(ask = TRUE){
 
 #' @rdname conda-env
 #' @export
-add_packages <- function(packages = NULL, python_ver = 'auto', ...) {
+add_packages <- function(packages = NULL, python_ver = 'auto', ..., env_name = NA) {
   set_conda(temporary = TRUE)
 
 
@@ -483,52 +503,49 @@ add_packages <- function(packages = NULL, python_ver = 'auto', ...) {
   packages <- unique(packages)
   if(!length(packages)){ return() }
   if( isTRUE(python_ver == "auto") ){
-    reticulate::conda_install(env_path(), packages = packages, ...)
+    reticulate::conda_install(env_path(env_name = env_name), packages = packages, ...)
   } else {
-    reticulate::conda_install(env_path(), packages = packages,
+    reticulate::conda_install(env_path(env_name = env_name), packages = packages,
                               python_version = python_ver, ...)
   }
 
 }
 
 # Find BLAS path, unix only
-BLAS_path <- function(){
-  fs <- list.files(file.path(env_path(), "lib"), pattern = "^libblas\\..*(dylib|so)", ignore.case = TRUE)
+BLAS_path <- function(env_name = NA){
+  fs <- list.files(file.path(env_path(env_name = env_name), "lib"), pattern = "^libblas\\..*(dylib|so)", ignore.case = TRUE)
   prefered <- c("libblas.dylib", "libblas.so")
 
   if(!length(fs)){ return() }
   sel <- fs[tolower(fs) %in% prefered]
   if(length(sel)){
-    return(normalizePath(file.path(env_path(), "lib", sel[[1]])))
+    return(normalizePath(file.path(env_path(env_name = env_name), "lib", sel[[1]])))
   }
-  return(normalizePath(file.path(env_path(), "lib", fs[[1]])))
+  return(normalizePath(file.path(env_path(env_name = env_name), "lib", fs[[1]])))
 }
 
-
-#' @rdname conda-env
-#' @export
-ensure_rpymat <- local({
+ensure_rpymat_internals <- local({
 
   conf <- NULL
   conda_prefix <- NULL
   blas <- NULL
 
-  function(verbose = TRUE, cache = TRUE){
+  init <- function(verbose = TRUE, cache = TRUE, env_name = NA){
     set_conda(temporary = FALSE)
 
     if(
       !cache || !inherits(conf, "py_config") ||
       !identical(conda_prefix, Sys.getenv("R_RPYMAT_CONDA_PREFIX", unset = ""))
     ) {
-      if(!dir.exists(env_path())) {
-        configure_conda()
+      if(!dir.exists(env_path(env_name = env_name))) {
+        configure_conda(env_name = env_name)
       }
 
       if(get_os() == "windows"){
         # C:\Users\KickStarter\AppData\Local\r-rpymat\miniconda\python.exe
-        python_bin <- normalizePath(file.path(env_path(), "python.exe"), winslash = "\\")
+        python_bin <- normalizePath(file.path(env_path(env_name = env_name), "python.exe"), winslash = "\\")
       } else {
-        python_bin <- normalizePath(file.path(env_path(), 'bin', "python"))
+        python_bin <- normalizePath(file.path(env_path(env_name = env_name), 'bin', "python"))
 
         # Also there are some inconsistency between BLAS used in R and conda packages
         # Mainly on OSX (because Apple dropped libfortran), but not limited
@@ -538,7 +555,7 @@ ensure_rpymat <- local({
           Sys.setenv("OMP_NUM_THREADS" = "1")
         }
         # Find OPENBLAS library
-        blas <<- BLAS_path()
+        blas <<- BLAS_path(env_name = env_name)
         if(length(blas)){
           Sys.setenv(OPENBLAS = blas)
         }
@@ -550,7 +567,7 @@ ensure_rpymat <- local({
 
       # reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
       # reticulate::py_config()
-      conf <<- reticulate::py_discover_config(use_environment = env_path())
+      conf <<- reticulate::py_discover_config(use_environment = env_path(env_name = env_name))
       conda_prefix <<- Sys.getenv("R_RPYMAT_CONDA_PREFIX", unset = "")
     }
 
@@ -562,7 +579,27 @@ ensure_rpymat <- local({
     }
     invisible(conf)
   }
+
+  test <- function() {
+    if(!inherits(conf, "py_config")) { return(NULL) }
+    conf
+  }
+
+  name <- function() {
+    if(!inherits(conf, "py_config")) { return(NULL) }
+    basename(conf$prefix)
+  }
+
+  list(
+    init = init,
+    test = test,
+    name = name
+  )
 })
+
+#' @rdname conda-env
+#' @export
+ensure_rpymat <- ensure_rpymat_internals$init
 
 #' @rdname conda-env
 #' @export

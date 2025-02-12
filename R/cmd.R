@@ -22,6 +22,7 @@
 #' @param suggest suggested shell type; default is \code{'cmd'} on windows,
 #' or \code{'bash'} on others
 #' @param env_list a key-value pairs of environment variables
+#' @param env_name \code{'conda'} environment name to activate, if not default.
 #' @returns All the functions return a list with class
 #' \code{rpymat_system_command} except for
 #' \code{run_command}, which returns the exit code by \code{\link{system2}}.
@@ -278,7 +279,7 @@ run_command <- function(command, shell = detect_shell(),
                         stdout = "", stderr = "", stdin = "", input = NULL,
                         env_list = list(), wait = TRUE, timeout = 0, ...,
                         workdir = getwd(), dry_run = FALSE, print_cmd = dry_run,
-                        glue_env = parent.frame()){
+                        glue_env = parent.frame(), env_name = NA){
 
   shell <- match.arg(shell)
   command <- cmd_create(command, shell, use_glue = use_glue)
@@ -289,7 +290,7 @@ run_command <- function(command, shell = detect_shell(),
     } else {
       conda_path <- conda_path()
     }
-    command <- cmd_set_conda(command, conda_path, env_path())
+    command <- cmd_set_conda(command, conda_path, env_path(env_name = env_name))
   }
   command <- cmd_set_workdir(command, workdir)
 
