@@ -1,60 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://dipterix.org/rpymat/404.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/index.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/news/index.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/choose-file.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/conda-env.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/jupyter.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/py_builtin.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/py_list.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/py_slice.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/read_xlsx.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/repl_python.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/reticulate-reexports.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/rpymat-python-main.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/run_command.html</loc>
-  </url>
-  <url>
-    <loc>http://dipterix.org/rpymat/reference/run_pyscript.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://dipterix.org/rpymat/404.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/LICENSE.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/authors.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/index.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/news/index.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/choose-file.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/conda-env.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/custom_env_support.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/index.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/jupyter.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/py_builtin.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/py_list.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/py_slice.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/read_xlsx.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/reexports.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/repl_python.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/reticulate-reexports.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/rpymat-python-main.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/run_command.html</loc></url>
+<url><loc>http://dipterix.org/rpymat/reference/run_pyscript.html</loc></url>
 </urlset>
+
