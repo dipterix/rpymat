@@ -544,6 +544,10 @@ ensure_rpymat_internals <- local({
       if(get_os() == "windows"){
         # C:\Users\KickStarter\AppData\Local\r-rpymat\miniconda\python.exe
         python_bin <- normalizePath(file.path(env_path(env_name = env_name), "python.exe"), winslash = "\\")
+        win_modifier <- Sys.getenv("CONDA_DLL_SEARCH_MODIFICATION_ENABLE", unset = NA)
+        if(is.na(win_modifier)) {
+          Sys.setenv("CONDA_DLL_SEARCH_MODIFICATION_ENABLE" = "1")
+        }
       } else {
         python_bin <- normalizePath(file.path(env_path(env_name = env_name), 'bin', "python"))
 
