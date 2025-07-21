@@ -423,6 +423,10 @@ configure_conda <- function(
     # install_conda(path = path, update = update, force = force)
   }
 
+  # conda tos
+  conda_tos("https://repo.anaconda.com/pkgs/main", silent_fail = TRUE)
+  conda_tos("https://repo.anaconda.com/pkgs/r", silent_fail = TRUE)
+
   # create virtual env
   if(force || update || !env_name %in% reticulate::conda_list()[['name']]){
     if( isTRUE(python_ver == "auto") ){
@@ -441,6 +445,44 @@ configure_conda <- function(
     add_packages(packages, python_ver, env_name = env_name)
   }
   error <- FALSE
+}
+
+#' @rdname conda-env
+#' @param channel channels from which the term-of-service is to be agreed on
+#' @param agree whether to agree on or reject the terms; default is true
+#' @param silent_fail whether the failure to agreeing to the term should not
+#' result in error; default is \code{FALSE}, which results in error if the
+#' command fails.
+#' @export
+conda_tos <- function(channel, agree = TRUE, silent_fail = FALSE) {
+  conda_bin_path <- normalizePath(conda_bin(), winslash = "/", mustWork = FALSE)
+  if(length(conda_bin_path) != 1 || !nzchar(conda_bin_path) ||
+     conda_bin_path %in% c("", ".", "..", "/") || !file.exists(conda_bin_path)) {
+    if(silent_fail) {
+      warning("No conda bin is found. Please configure conda first.")
+    } else {
+      stop("No conda bin is found. Please configure conda first.")
+    }
+    return(invisible())
+  }
+  if(agree) {
+    agree_str <- "accept"
+  } else {
+    agree_str <- "reject"
+  }
+  tryCatch(
+    {
+      system2(conda_bin_path, args = c("tos", agree_str, "--channel", shQuote(channel)))
+    },
+    error = function(e) {
+      if(silent_fail) {
+        warning(e)
+      } else {
+        stop(e)
+      }
+    }
+  )
+  return(invisible())
 }
 
 

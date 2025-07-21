@@ -9,6 +9,7 @@
 \alias{list_pkgs}
 \alias{configure_matlab}
 \alias{configure_conda}
+\alias{conda_tos}
 \alias{remove_conda}
 \alias{add_packages}
 \alias{ensure_rpymat}
@@ -37,6 +38,8 @@ configure_conda(
   standalone = FALSE,
   env_name = CONDAENV_NAME()
 )
+
+conda_tos(channel, agree = TRUE, silent_fail = FALSE)
 
 remove_conda(ask = TRUE, env_name = NA)
 
@@ -76,6 +79,14 @@ works. Please see 'Configuration'.}
 
 \item{standalone}{whether to install \code{conda} regardless of existing
 \code{conda} environment}
+
+\item{channel}{channels from which the term-of-service is to be agreed on}
+
+\item{agree}{whether to agree on or reject the terms; default is true}
+
+\item{silent_fail}{whether the failure to agreeing to the term should not
+result in error; default is \code{FALSE}, which results in error if the
+command fails.}
 
 \item{ask}{whether to ask for user's agreement to remove the repository.
 This parameter should be true if your functions depend on
