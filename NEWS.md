@@ -1,3 +1,10 @@
+# rpymat 0.1.8
+
+* Supports multiple environments for incompatible packages
+* Fixed windows `dll` modification issue
+* Added function to accept and reject `conda` term-of-service 
+* Force configuring `conda` no longer download `miniconda` of already installed
+
 # rpymat 0.1.7
 
 * Set longer time-out when installing `conda`
