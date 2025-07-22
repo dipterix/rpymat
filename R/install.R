@@ -395,13 +395,14 @@ configure_conda <- function(
   }
 
   miniconda_needs_install <- FALSE
-  if( force || update || !dir.exists(path) ) {
+  # if( force || update || !dir.exists(path) ) {
+  if( !dir.exists(path) && (standalone || !conda_is_user_defined()) ) {
     # needs install
     miniconda_needs_install <- TRUE
-    if( !standalone && conda_is_user_defined() ) {
-      # rpymat is inside of a conda environment
-      miniconda_needs_install <- FALSE
-    }
+    # if( !standalone && conda_is_user_defined() ) {
+    #   # rpymat is inside of a conda environment
+    #   miniconda_needs_install <- FALSE
+    # }
   }
 
   if( miniconda_needs_install ){
