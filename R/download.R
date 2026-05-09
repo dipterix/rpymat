@@ -1,12 +1,12 @@
 
-miniconda_installer_url <- function (version = "3") {
+miniconda_installer_url <- function(version = "3") {
   url <- getOption("reticulate.miniconda.url")
   if (!is.null(url)) { return() }
   base <- "https://repo.anaconda.com/miniconda"
   rver <- R.version
-  if( isTRUE(rver$arch == "aarch64") ){
+  if ( isTRUE(rver$arch == "aarch64") ) {
     arch <- "armv71"
-    if( startsWith(rver$os, 'darwin') ){
+    if ( startsWith(rver$os, "darwin") ) {
       options("reticulate.miniconda.url" =
                 "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh")
                 # "https://github.com/conda-forge/miniforge/releases/download/4.9.2-7/Mambaforge-4.9.2-7-MacOSX-arm64.sh")
@@ -16,7 +16,7 @@ miniconda_installer_url <- function (version = "3") {
   return()
 }
 
-# install_conda <- function(path, update = TRUE, force = FALSE){
+# install_conda <- function(path, update = TRUE, force = FALSE) {
 #   ns <- asNamespace('reticulate')
 #   ns$check_forbidden_install("Miniconda")
 #   if (grepl(" ", path, fixed = TRUE))

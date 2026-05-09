@@ -49,13 +49,13 @@ NULL
 
 #' @rdname jupyter
 #' @export
-add_jupyter <- function(..., register_R = TRUE){
+add_jupyter <- function(..., register_R = TRUE) {
   add_packages(packages = c("notebook", "numpy", "h5py", "matplotlib", "pandas", "jupyterlab"), channel = "conda-forge", ...)
   try({
     add_packages(packages = c("jupyterlab-git", "ipywidgets", "jupyter-server-proxy"), channel = "conda-forge")
     # add_packages(c('jupyterlab_latex', 'jupyterlab_github', 'matlab_kernel'), pip = TRUE)
   })
-  if(register_R && system.file("kernelspec", package = "IRkernel") != ""){
+  if (register_R && system.file("kernelspec", package = "IRkernel") != "") {
     jupyter_register_R(...)
   }
   invisible()
@@ -63,15 +63,15 @@ add_jupyter <- function(..., register_R = TRUE){
 
 #' @rdname jupyter
 #' @export
-jupyter_bin <- function(){
+jupyter_bin <- function() {
   f <- c(
     file.path(env_path(), "bin", "jupyter"),
     file.path(env_path(), "Scripts", "jupyter.exe")
   )
-  if(any(file.exists(f))){
+  if (any(file.exists(f))) {
     f <- f[file.exists(f)][[1]]
   } else {
-    if(get_os() == "windows"){
+    if (get_os() == "windows") {
       f <- f[[2]]
     } else {
       f <- f[[1]]
@@ -82,13 +82,13 @@ jupyter_bin <- function(){
 
 #' @rdname jupyter
 #' @export
-jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rprofile = NULL,
+jupyter_register_R <- function(user = NULL, name = "ir", displayname = "R", rprofile = NULL,
           prefix = NULL, sys_prefix = NULL, verbose = getOption("verbose"))
 {
 
   if (get_os() != "windows") {
     exit_code <- run_command(command = sprintf("%s kernelspec --version", shQuote(jupyter_bin())), stdout = FALSE, stderr = FALSE)
-    if(!isTRUE(exit_code == 0)){
+    if (!isTRUE(exit_code == 0)) {
       warning("Please install jupyter first via `add_jupyter()`\n")
     }
   } else {
@@ -106,7 +106,7 @@ jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rpr
   tmp_name <- tempfile()
   dir.create(tmp_name)
   on.exit({
-    if(dir.exists(tmp_name)){
+    if (dir.exists(tmp_name)) {
       unlink(tmp_name, recursive = TRUE)
     }
   })
@@ -144,33 +144,33 @@ jupyter_register_R <- function (user = NULL, name = "ir", displayname = "R", rpr
 #' @rdname jupyter
 jupyter_options <- function(
     root_dir, host = "127.0.0.1", port = 8888, open_browser = FALSE,
-    token = rand_string(), base_url = "/jupyter/"){
+    token = rand_string(), base_url = "/jupyter/") {
   root_dir <- normalizePath(root_dir, winslash = "\\", mustWork = TRUE)
-  root_dir <- gsub('\\\\', '\\\\\\\\', root_dir)
+  root_dir <- gsub("\\\\", "\\\\\\\\", root_dir)
 
   base_url <- trimws(gsub("[/|\\\\]{1,}", "/", base_url))
-  if(!startsWith(base_url, "/")) {
+  if (!startsWith(base_url, "/")) {
     base_url <- sprintf("/%s", base_url)
   }
 
   glue::glue(
     .sep = "\n",
     # 'c.GatewayClient.url = "http://{host}:{port+1}"',
-    'import os',
+    "import os",
     'c.ServerApp.ip = "{host}"',
     'c.ServerApp.allow_origin = "*"',
-    'c.ServerApp.port = {port}',
-    sprintf('c.ServerApp.open_browser = %s', ifelse(isTRUE(open_browser), "True", "False")),
+    "c.ServerApp.port = {port}",
+    sprintf("c.ServerApp.open_browser = %s", ifelse(isTRUE(open_browser), "True", "False")),
     'c.ServerApp.base_url = "{base_url}"',
     'c.ServerApp.token = os.getenv("JUPYTER_TOKEN", "{token}")',
     'c.ServerApp.password = ""',
     'c.ServerApp.root_dir = "{root_dir}"',
 
-    'c.ServerApp.tornado_settings = {{',
-    '  \'headers\' : {{',
+    "c.ServerApp.tornado_settings = {{",
+    "  'headers' : {{",
     '    \'Content-Security-Policy\' : "frame-ancestors * \'self\' "',
-    '  }}',
-    '}}'
+    "  }}",
+    "}}"
   )
 
   # glue::glue(
@@ -198,7 +198,7 @@ jupyter_options <- function(
 #' @export
 jupyter_launch <- function(host = "127.0.0.1", port = 8888,
                            open_browser = TRUE, workdir = getwd(),
-                           async = FALSE, ..., dry_run = FALSE){
+                           async = FALSE, ..., dry_run = FALSE) {
   port <- as.integer(port)
   stopifnot(is.finite(port))
   # add_jupyter()
@@ -207,14 +207,14 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
   conf <- jupyter_options(root_dir = workdir, host = host, port = port, open_browser = open_browser, ...)
 
   conf_dir <- file.path(
-    R_user_dir(package = 'rpymat', which = "config"),
-    'jupyter-configurations', port
+    R_user_dir(package = "rpymat", which = "config"),
+    "jupyter-configurations", port
   )
   dir.create(file.path(conf_dir, "custom"), showWarnings = FALSE, recursive = TRUE)
   conf_dir <- normalizePath(conf_dir)
   writeLines(conf, con = file.path(conf_dir, "jupyter_notebook_config.py"))
   writeLines(c(
-    "define(['base/js/namespace'], function(Jupyter){",
+    "define(['base/js/namespace'], function(Jupyter) {",
     "  Jupyter._target = '_self';",
     "});"
   ), con = file.path(conf_dir, "custom", "custom.js"))
@@ -228,18 +228,18 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
   env <- sprintf("JUPYTER_CONFIG_DIR=%s", shQuote(conf_dir))
   env_list <- list(`JUPYTER_CONFIG_DIR` = conf_dir)
 
-  if(async && !dry_run){
+  if (async && !dry_run) {
     tf <- tempfile()
 
     expr <- bquote({
-      ns <- asNamespace('rpymat')
+      ns <- asNamespace("rpymat")
       ns$run_command(.(command), workdir = .(workdir), env_list = .(env_list),
                      env = .(env), wait = TRUE, dry_run = .(dry_run))
     })
 
     writeLines(deparse(expr), con = tf)
 
-    if( rstudioapi::isAvailable("1.4", child_ok = TRUE) ) {
+    if ( rstudioapi::isAvailable("1.4", child_ok = TRUE) ) {
 
       rstudioapi::jobRunScript(tf, name = "JupyterLab Server", workingDir = workdir, importEnv = NULL, exportEnv = "")
       try({
@@ -253,7 +253,7 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
   } else {
     re <- run_command(command, workdir = workdir, env_list = env_list,
                       env = env, wait = TRUE, dry_run = dry_run)
-    if( dry_run ) {
+    if ( dry_run ) {
       return(re)
     }
   }
@@ -267,7 +267,7 @@ jupyter_launch <- function(host = "127.0.0.1", port = 8888,
 #' @export
 jupyter_check_launch <- function(port = 8888, host = "127.0.0.1",
                                  open_browser = TRUE, workdir = getwd(),
-                                 async = 'auto', ...){
+                                 async = "auto", ...) {
   port <- as.integer(port)
   stopifnot(is.finite(port))
 
@@ -275,20 +275,20 @@ jupyter_check_launch <- function(port = 8888, host = "127.0.0.1",
 
   tryCatch({
     server_list <- jupyter_server_list()
-    if(port %in% server_list$port){
-      if(!isFALSE(open_browser)){
+    if (port %in% server_list$port) {
+      if (!isFALSE(open_browser)) {
         instance <- server_list[server_list$port == port, ]
         url <- sprintf("http://%s:%s/jupyter/lab?token=%s", instance$host, instance$port, instance$token)
         utils::browseURL(url)
       }
       return(FALSE)
     }
-  }, error = function(e){
-    if(!identical(e$message, "No Jupyter server instance is running")){
+  }, error = function(e) {
+    if (!identical(e$message, "No Jupyter server instance is running")) {
       warning(e)
     }
   })
-  if(identical(async, "auto")){
+  if (identical(async, "auto")) {
     # async <- rstudioapi::isAvailable("1.4", child_ok = TRUE)
     async <- TRUE
   } else {
@@ -304,7 +304,7 @@ jupyter_check_launch <- function(port = 8888, host = "127.0.0.1",
 
 #' @rdname jupyter
 #' @export
-jupyter_server_list <- function(){
+jupyter_server_list <- function() {
   quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
   command <- c(
     "echo off",
@@ -315,11 +315,11 @@ jupyter_server_list <- function(){
 
   res <- res[grepl("http[s]{0,1}://.*:[0-9]{2,5}/jupyter/", res)]
   res <- strsplit(res, "/jupyter/")
-  res <- lapply(res, function(x){
+  res <- lapply(res, function(x) {
     token <- ""
-    if(length(x) > 1){
+    if (length(x) > 1) {
       token <- strsplit(x[[2]], " ")[[1]][[1]]
-      if(startsWith(token, "?token=")){
+      if (startsWith(token, "?token=")) {
         token <- sub(pattern = "^\\?token=", "", token)
       }
     }
@@ -328,10 +328,10 @@ jupyter_server_list <- function(){
     c(x[1:2], token)
   })
 
-  if(!length(res)){
+  if (!length(res)) {
     stop("No Jupyter server instance is running")
   }
-  res <- do.call('rbind', res[sapply(res, length) == 3])
+  res <- do.call("rbind", res[sapply(res, length) == 3])
   res <- as.data.frame(res)
   names(res) <- c("host", "port", "token")
   res$port <- as.integer(res$port)
@@ -341,7 +341,7 @@ jupyter_server_list <- function(){
 
 #' @rdname jupyter
 #' @export
-jupyter_server_stop <- function(port, ...){
+jupyter_server_stop <- function(port, ...) {
   quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")
   command <- sprintf("%s server stop %.0f", quoted_cmd, port)
   run_command(command, wait = TRUE, ...)
@@ -350,7 +350,7 @@ jupyter_server_stop <- function(port, ...){
 
 #' @rdname jupyter
 #' @export
-jupyter_server_stop_all <- function(...){
+jupyter_server_stop_all <- function(...) {
   try({
     server_list <- jupyter_server_list()
     quoted_cmd <- shQuote(jupyter_bin(), type = "cmd")

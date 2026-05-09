@@ -37,7 +37,7 @@ choose_fileopen <- function(
     initialfile = NULL, multiple = FALSE,
     title = ifelse(multiple, "Choose Files", "Choose a File"),
     message = "", verbose = FALSE, force = FALSE) {
-  if(length(initialfile) != 1 || is.na(initialfile)) {
+  if (length(initialfile) != 1 || is.na(initialfile)) {
     initialfile <- NULL
   } else {
     initialfile <- normalizePath(initialfile, mustWork = FALSE)
@@ -48,7 +48,7 @@ choose_fileopen <- function(
   title <- as.character(title)
   message <- as.character(message)
 
-  if( multiple || force ) {
+  if ( multiple || force ) {
     re <- run_template(
       system.file(package = "rpymat", "py_templates", "choose-fileopen.py"),
       initialfile = initialfile,
@@ -65,9 +65,9 @@ choose_fileopen <- function(
     })
   }
 
-  if(length(re)) {
+  if (length(re)) {
     re <- re[trimws(re) != ""]
-    if(length(re)) {
+    if (length(re)) {
       return(re)
     }
   }
@@ -90,7 +90,7 @@ choose_filesave <- function() {
 choose_directory <- function(
     initialdir = NULL, title = "Choose a Directory", message = "",
     verbose = FALSE) {
-  if(length(initialdir) != 1 || is.na(initialdir)) {
+  if (length(initialdir) != 1 || is.na(initialdir)) {
     initialdir <- getwd()
   }
   initialdir <- normalizePath(initialdir, mustWork = FALSE)
@@ -119,9 +119,9 @@ choose_directory <- function(
     message = message,
     .verbose = verbose
   )
-  if(length(re)) {
+  if (length(re)) {
     re <- re[trimws(re) != ""]
-    if(length(re)) {
+    if (length(re)) {
       return(re[[1]])
     }
   }

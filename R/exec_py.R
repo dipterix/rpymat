@@ -1,14 +1,14 @@
 fix_indent <- function(code) {
   code_c <- strsplit(code, "\n")[[1]]
-  if(length(code_c)) {
+  if (length(code_c)) {
     is_blank_line <- !nzchar(trimws(code_c[[1]]))
-    if( is_blank_line ) {
+    if ( is_blank_line ) {
       code_c <- code_c[-1]
     }
-    if(length(code_c)) {
+    if (length(code_c)) {
       leading_wsp <- gsub("[^ ].*$", "", code_c)
       leading_wsp <- min(nchar(leading_wsp))
-      if(leading_wsp > 0) {
+      if (leading_wsp > 0) {
         code_c <- substring(code_c, leading_wsp + 1)
       }
       code <- paste(code_c, collapse = "\n")
@@ -62,9 +62,9 @@ fix_indent <- function(code) {
 #' }
 #'
 #' @export
-run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE, globals = list()){
+run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE, globals = list()) {
 
-  if(length(work_dir) == 1 && dir.exists(work_dir)){
+  if (length(work_dir) == 1 && dir.exists(work_dir)) {
     `_cwd` <- getwd()
     on.exit({setwd(`_cwd`)}, add = TRUE, after = TRUE)
     work_dir <- normalizePath(work_dir)
@@ -75,9 +75,9 @@ run_script <- function(x, work_dir = NULL, local = FALSE, convert = FALSE, globa
   ensure_rpymat(verbose = FALSE)
 
   py <- import_main(convert = FALSE)
-  if(length(globals) > 0) {
+  if (length(globals) > 0) {
     lapply(names(globals), function(nm) {
-      if(trimws(nm) != "") {
+      if (trimws(nm) != "") {
         py[[ nm ]] <- globals[[nm]]
       } else {
         stop("rpymat::run_script(..., globals) - `globals` must be a NAMED list.")
@@ -96,13 +96,13 @@ run_pyscript <- function(x, work_dir = NULL, local = FALSE, convert = FALSE, glo
   env_name <- clean_env_name(env_name)
   current_env_name <- ensure_rpymat_internals$name()
 
-  if(length(work_dir) == 1 && dir.exists(work_dir)){
+  if (length(work_dir) == 1 && dir.exists(work_dir)) {
     work_dir <- normalizePath(work_dir)
   } else {
     work_dir <- getwd()
   }
 
-  if(force_child_process || (length(current_env_name) && !identical(env_name, current_env_name))) {
+  if (force_child_process || (length(current_env_name) && !identical(env_name, current_env_name))) {
     # this script needs to run in rs_exec
 
     tempdir(check = TRUE)
@@ -144,9 +144,9 @@ run_pyscript <- function(x, work_dir = NULL, local = FALSE, convert = FALSE, glo
 
     }), quoted = TRUE, wait = TRUE, name = sprintf("Running python (env: %s)", env_name), focus_on_console = TRUE, ...)
 
-    if(res == 0) {
+    if (res == 0) {
       # Get results
-      if(file.exists(global_pickle)) {
+      if (file.exists(global_pickle)) {
         results <- reticulate::py_load_object(filename = global_pickle, convert = convert)
       } else {
         results <- NULL
@@ -167,7 +167,7 @@ run_pystring <- function(code, work_dir = NULL, local = FALSE, convert = FALSE, 
 
   code <- fix_indent(code)
 
-  if(length(work_dir) == 1 && dir.exists(work_dir)){
+  if (length(work_dir) == 1 && dir.exists(work_dir)) {
     `_cwd` <- getwd()
     on.exit({setwd(`_cwd`)}, add = TRUE, after = TRUE)
     work_dir <- normalizePath(work_dir)
@@ -177,9 +177,9 @@ run_pystring <- function(code, work_dir = NULL, local = FALSE, convert = FALSE, 
   ensure_rpymat(verbose = FALSE)
 
   py <- import_main(convert = FALSE)
-  if(length(globals) > 0) {
+  if (length(globals) > 0) {
     lapply(names(globals), function(nm) {
-      if(trimws(nm) != "") {
+      if (trimws(nm) != "") {
         py[[ nm ]] <- globals[[nm]]
       } else {
         stop("rpymat::run_script(..., globals) - `globals` must be a NAMED list.")
@@ -208,12 +208,12 @@ repl_python <- function(..., env_name = NA) {
 
 run_template <- function(path, .envir = parent.frame(), .verbose = FALSE, ..., .env_name = NA) {
   # path <- "./inst/py_templates/choose-dir.py"
-  if(!file.exists(path)) {
+  if (!file.exists(path)) {
     stop("`run_template`: cannot find template path")
   }
 
   # ensure conda
-  if(!dir.exists(env_path(env_name = .env_name))) {
+  if (!dir.exists(env_path(env_name = .env_name))) {
     configure_conda(env_name = .env_name)
   }
 
@@ -236,23 +236,23 @@ run_template <- function(path, .envir = parent.frame(), .verbose = FALSE, ..., .
   tf2 <- gsub("\\\\", "\\\\\\\\", tf)
 
   code <- rpymat::run_command(sprintf("python -q %s", shQuote(tf2)), stdout = tfout, stderr = tfout, wait = TRUE, env_name = .env_name)
-  if( .verbose ) {
+  if ( .verbose ) {
     message("Program exits with status: ", code)
   }
 
   re <- character()
-  if(file.exists(tfout)) {
+  if (file.exists(tfout)) {
     s <- readLines(tfout)
-    if( .verbose ) {
+    if ( .verbose ) {
       message(paste(s, collapse = "\n"))
     }
     idx1 <- which(startsWith(s, "RPYMAT_RESULT_START"))
     idx2 <- which(startsWith(s, "RPYMAT_RESULT_END"))
-    if(length(idx1)) {
+    if (length(idx1)) {
       idx1 <- idx1[[1]]
-      if(length(idx2)) {
+      if (length(idx2)) {
         idx2 <- idx2[[1]]
-        if(idx2 <= idx1) {
+        if (idx2 <= idx1) {
           idx2 <- length(s) + 1
         }
       } else {
@@ -260,7 +260,7 @@ run_template <- function(path, .envir = parent.frame(), .verbose = FALSE, ..., .
       }
       idx1 <- idx1 + 1
       idx2 <- idx2 - 1
-      if(idx1 <= idx2) {
+      if (idx1 <= idx2) {
         re <- s[seq(idx1, idx2)]
       }
     }

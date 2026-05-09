@@ -6,11 +6,11 @@ package_list <- list(
   default = c("numpy", "jupyter", "matplotlib", "pandas", "xarray", "h5py"),
   anaconda = c("scikit-learn")
 )
-lapply(names(package_list), function(channel){
+lapply(names(package_list), function(channel) {
   pkgs <- package_list[[channel]]
-  if(channel == 'pip'){
+  if (channel == 'pip') {
     rpymat::add_packages(pkgs, pip = TRUE)
-  } else if(channel == "default"){
+  } else if(channel == "default") {
     rpymat::add_packages(pkgs)
   } else {
     rpymat::add_packages(pkgs, channel = channel)

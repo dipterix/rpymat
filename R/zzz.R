@@ -36,16 +36,16 @@ NULL
 
   main <- NULL
 
-  makeActiveBinding("py", fun = function(){
+  makeActiveBinding("py", fun = function() {
     if (!is.null(main)) { return(main) }
 
-    if( !rpymat_is_setup() ) {
+    if ( !rpymat_is_setup() ) {
       return( NULL )
     }
 
     reticulate <- asNamespace("reticulate")
     py <- tryCatch({
-      if(isTRUE(reticulate$is_python_initialized())) {
+      if (isTRUE(reticulate$is_python_initialized())) {
         py <- import_main(convert = TRUE)
       } else {
         py <- NULL
@@ -54,10 +54,10 @@ NULL
     }, error = function(e) {
       tryCatch({
         return(reticulate$py)
-      }, error = function(e){ NULL })
+      }, error = function(e) { NULL })
     })
 
-    if(!is.null(py)) {
+    if (!is.null(py)) {
       main <<- py
     }
     main

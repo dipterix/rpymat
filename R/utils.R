@@ -90,13 +90,13 @@ to_py <- function(x, ifnotpy = NULL, ifpy = NULL) {
   ifnotpy <- substitute(ifnotpy)
   ifpy <- substitute(ifpy)
   parent_frame <- parent.frame()
-  if( !is.null(ifnotpy) && !inherits(x, "python.builtin.object") ) {
+  if ( !is.null(ifnotpy) && !inherits(x, "python.builtin.object") ) {
     eval(ifnotpy, parent_frame)
-  } else if( !is.null(ifpy) && inherits(x, "python.builtin.object") ) {
+  } else if ( !is.null(ifpy) && inherits(x, "python.builtin.object") ) {
     eval(ifpy, parent_frame)
   }
   x <- eval(x2, new.env(parent = parent_frame))
-  if( !inherits(x, "python.builtin.object") ) {
+  if ( !inherits(x, "python.builtin.object") ) {
     x <- r_to_py(x)
   }
   return(x)

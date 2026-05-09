@@ -52,7 +52,7 @@ import_main <- function(convert = FALSE) {
 
 #' @rdname reticulate-reexports
 #' @export
-tuple <- function (..., convert = FALSE) {
+tuple <- function(..., convert = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::tuple(convert = convert, ...))
 }
@@ -63,21 +63,21 @@ py_tuple <- tuple
 
 #' @rdname reticulate-reexports
 #' @export
-py_help <- function (object) {
+py_help <- function(object) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_help(object = object))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-np_array <- function (data, ...) {
+np_array <- function(data, ...) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::np_array(data = data, ...))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-import <- function (module, as = NULL, convert = FALSE, delay_load = FALSE) {
+import <- function(module, as = NULL, convert = FALSE, delay_load = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::import(module = module, as = as, convert = convert,
                             delay_load = delay_load))
@@ -85,35 +85,35 @@ import <- function (module, as = NULL, convert = FALSE, delay_load = FALSE) {
 
 #' @rdname reticulate-reexports
 #' @export
-r_to_py <- function (x, convert = FALSE) {
+r_to_py <- function(x, convert = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::r_to_py(x = x, convert = convert))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_to_r <- function (x) {
+py_to_r <- function(x) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_to_r(x = x))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_to_r_wrapper <- function (x) {
+py_to_r_wrapper <- function(x) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_to_r_wrapper(x = x))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_str <- function (object, ...) {
+py_str <- function(object, ...) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_str(object = object, ...))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_run_string <- function (code, local = TRUE, convert = FALSE) {
+py_run_string <- function(code, local = TRUE, convert = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_run_string(code = code, local = local,
                                    convert = convert))
@@ -121,14 +121,14 @@ py_run_string <- function (code, local = TRUE, convert = FALSE) {
 
 #' @rdname reticulate-reexports
 #' @export
-py_bool <- function (x) {
+py_bool <- function(x) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_bool(x = x))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_dict <- function (keys, values, convert = FALSE) {
+py_dict <- function(keys, values, convert = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_dict(keys = keys, values = values,
                              convert = convert))
@@ -136,70 +136,70 @@ py_dict <- function (keys, values, convert = FALSE) {
 
 #' @rdname reticulate-reexports
 #' @export
-py_call <- function (x, ...) {
+py_call <- function(x, ...) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_call(x = x, ...))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_del_attr <- function (x, name) {
+py_del_attr <- function(x, name) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_del_attr(x = x, name = name))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_del_item <- function (x, name) {
+py_del_item <- function(x, name) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_del_item(x = x, name = name))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_eval <- function (code, convert = FALSE) {
+py_eval <- function(code, convert = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_eval(code = code, convert = convert))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_get_attr <- function (x, name, silent = FALSE) {
+py_get_attr <- function(x, name, silent = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_get_attr(x = x, name = name, silent = silent))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_set_attr <- function (x, name, value) {
+py_set_attr <- function(x, name, value) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_set_attr(x = x, name = name, value = value))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_get_item <- function (x, key, silent = FALSE) {
+py_get_item <- function(x, key, silent = FALSE) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_get_item(x = x, key = key, silent = silent))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_set_item <- function (x, name, value) {
+py_set_item <- function(x, name, value) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_set_item(x = x, name = name, value = value))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_len <- function (x, default = NULL) {
+py_len <- function(x, default = NULL) {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_len(x = x, default = default))
 }
 
 #' @rdname reticulate-reexports
 #' @export
-py_none <- function () {
+py_none <- function() {
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_none())
 }
@@ -214,21 +214,21 @@ py_none <- function () {
 #     # name <- "tuple"
 #     ns <- asNamespace("reticulate")
 #     fml <- formals(ns[[name]])
-#     f <- function(){}
+#     f <- function() {}
 #     formals(f) <- fml
 #
 #     has_dots <- "..." %in% names(fml)
-#     if( has_dots ) {
+#     if ( has_dots ) {
 #       fml[["..."]] <- NULL
 #     }
 #
-#     for(nm in names(fml)) {
+#     for (nm in names(fml)) {
 #       fml[[nm]] <- str2lang(nm)
 #     }
 #     call <- as.call(c(list(quote(fname)), fml))
 #     s <- deparse(call)
 #     s <- gsub("^fname\\(", sprintf("reticulate\\:\\:%s\\(", name), s, perl = TRUE)
-#     if( has_dots ) {
+#     if ( has_dots ) {
 #       s <- gsub(")$", ", ...)", s)
 #     }
 #

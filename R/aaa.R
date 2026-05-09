@@ -4,31 +4,31 @@ NULL
 
 # ---- internal commons --------------------------------------------------------
 
-get_os <- function(){
-  if("windows" %in% tolower(.Platform$OS.type)){
+get_os <- function() {
+  if ("windows" %in% tolower(.Platform$OS.type)) {
     return("windows")
   }
   os <- tolower(R.version$os)
-  if(startsWith(os, "darwin")){
-    return('darwin')
+  if (startsWith(os, "darwin")) {
+    return("darwin")
   }
-  if(startsWith(os, "linux")){
-    return('linux')
+  if (startsWith(os, "linux")) {
+    return("linux")
   }
-  if(startsWith(os, "solaris")){
-    return('solaris')
+  if (startsWith(os, "solaris")) {
+    return("solaris")
   }
-  if(startsWith(os, "win")){
-    return('windows')
+  if (startsWith(os, "win")) {
+    return("windows")
   }
-  return('unknown')
+  return("unknown")
 }
 
-is_arm <- function(){
+is_arm <- function() {
   grepl("arch64", R.version$arch)
 }
 
-R_user_dir <- function (package, which = c("data", "config", "cache")) {
+R_user_dir <- function(package, which = c("data", "config", "cache")) {
   stopifnot(is.character(package), length(package) == 1L)
   which <- match.arg(which)
   home <- normalizePath("~")
@@ -55,12 +55,12 @@ R_user_dir <- function (package, which = c("data", "config", "cache")) {
 }
 
 
-setwd2 <- function(d, quiet = FALSE){
+setwd2 <- function(d, quiet = FALSE) {
   d <- normalizePath(d, mustWork = TRUE)
 
   parent_frame <- parent.frame()
 
-  if(identical(parent_frame, .GlobalEnv)){
+  if (identical(parent_frame, .GlobalEnv)) {
     warning("`setwd2` should not be called directly")
   }
 
@@ -74,13 +74,13 @@ setwd2 <- function(d, quiet = FALSE){
     on.exit, list(expr, add = TRUE, after = TRUE),
     envir = parent_frame
   )
-  if(!quiet){
+  if (!quiet) {
     message("Setting working directory -> ", d)
   }
   setwd(d)
 }
 
-rand_string <- function (length = 50) {
+rand_string <- function(length = 50) {
   paste(sample(c(letters, LETTERS, 0:9), length, replace = TRUE),
         collapse = "")
 }
@@ -102,11 +102,11 @@ run_package_function <- function(
         stop(sprintf("Cannot find package function %s::%s", ns, fun))
       }
       return(f(...))
-    }, abort = function(...){})
+    }, abort = function(...) {})
   }, error = function(e) {
-    if( .on_failure == "error" ) {
+    if ( .on_failure == "error" ) {
       stop(e)
-    } else if( .on_failure == "warning" ) {
+    } else if ( .on_failure == "warning" ) {
       warning(e)
     }
     invisible(e)
@@ -115,11 +115,11 @@ run_package_function <- function(
 
 
 rpymat_has_version <- function(min = NA) {
-  if(system.file(package = "rpymat") == "") { return(FALSE) }
-  if(is.na(min)) { return(TRUE) }
+  if (system.file(package = "rpymat") == "") { return(FALSE) }
+  if (is.na(min)) { return(TRUE) }
 
   rpymat_ver <- utils::packageVersion("rpymat")
-  if( utils::compareVersion(as.character(rpymat_ver), min) < 0 ) {
+  if ( utils::compareVersion(as.character(rpymat_ver), min) < 0 ) {
     return(FALSE)
   }
   return(TRUE)

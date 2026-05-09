@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{glue}{\code{\link[glue]{glue}}}
+  \item{glue}{\code{\link[glue:glue]{glue()}}}
 }}
 

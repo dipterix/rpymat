@@ -1,4 +1,4 @@
-fastqueue2 <- function (init = 20L, missing_default = NULL) {
+fastqueue2 <- function(init = 20L, missing_default = NULL) {
   queue <- fastmap::fastqueue(init = init, missing_default = missing_default)
   head <- 0
   count <- 0
@@ -7,7 +7,7 @@ fastqueue2 <- function (init = 20L, missing_default = NULL) {
   q <- NULL
 
   queue$at <- with(ev, {
-    function(i){
+    function(i) {
       if (is.na(i) || i < 1L || i > count) {
         stop("subscript out of bounds")
       }
@@ -17,7 +17,7 @@ fastqueue2 <- function (init = 20L, missing_default = NULL) {
 
 
   queue$mat <- with(ev, {
-    function(i){
+    function(i) {
       q[head - count + i]
     }
   })

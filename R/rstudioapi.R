@@ -3,9 +3,9 @@ master_session_id <- local({
   uuid <- NULL
 
   function() {
-    if(is.null(uuid)) {
+    if (is.null(uuid)) {
       id <- getOption("rpymat.uuid", "")
-      if(!nzchar(id)) {
+      if (!nzchar(id)) {
         id <- rand_string()
       }
       uuid <<- id
@@ -15,10 +15,10 @@ master_session_id <- local({
 })
 
 
-rs_avail <- function (version_needed = "1.3", child_ok = FALSE, shiny_ok = TRUE) {
+rs_avail <- function(version_needed = "1.3", child_ok = FALSE, shiny_ok = TRUE) {
   if (!shiny_ok && system.file(package = "shiny") != "") {
     shiny <- asNamespace("shiny")
-    if( !is.null(shiny$getDefaultReactiveDomain()) ) { return(FALSE) }
+    if ( !is.null(shiny$getDefaultReactiveDomain()) ) { return(FALSE) }
   }
   if (!requireNamespace("rstudioapi")) {
     return(FALSE)
@@ -28,7 +28,7 @@ rs_avail <- function (version_needed = "1.3", child_ok = FALSE, shiny_ok = TRUE)
 }
 
 
-rs_focus_console <- function (wait = 0.5) {
+rs_focus_console <- function(wait = 0.5) {
   if (rs_avail(version_needed = "1.4")) {
     if (wait > 0) {
       Sys.sleep(wait)
@@ -41,7 +41,7 @@ rs_focus_console <- function (wait = 0.5) {
 }
 
 
-rs_runjob <- function (script, name, focus_on_console = FALSE, ...) {
+rs_runjob <- function(script, name, focus_on_console = FALSE, ...) {
   rstudioapi::jobRunScript(path = script, name = name, workingDir = tempdir(),
                            importEnv = NULL, exportEnv = "")
   if (focus_on_console) {
@@ -50,7 +50,7 @@ rs_runjob <- function (script, name, focus_on_console = FALSE, ...) {
   return()
 }
 
-rs_runjob_alt <- function (script, name, wait = TRUE, args = c("--no-save", "--no-restore"), ignore.stdout = FALSE, ignore.stderr = FALSE, ...) {
+rs_runjob_alt <- function(script, name, wait = TRUE, args = c("--no-save", "--no-restore"), ignore.stdout = FALSE, ignore.stderr = FALSE, ...) {
   if (!file.exists(script)) {
     stop("script is missing")
   }
@@ -73,15 +73,14 @@ rs_runjob_alt <- function (script, name, wait = TRUE, args = c("--no-save", "--n
   if (get_os() == "windows") {
     call_args$minimized <- TRUE
     call_args$invisible <- TRUE
-  }
-  else {
+  } else {
   }
   do.call(system2, call_args)
   return()
 }
 
 
-rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE,
+rs_exec_internal <- function(expr, name = "Untitled", quoted = FALSE, rs = TRUE,
                               wait = FALSE, packages = NULL, focus_on_console = FALSE,
                               ..., nested_ok = FALSE)
 {
@@ -92,7 +91,7 @@ rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE
     expr <- substitute(expr)
   }
   tdir <- tempdir(check = TRUE)
-  if(!dir.exists(tdir)) {
+  if (!dir.exists(tdir)) {
     dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
   }
   script <- tempfile()
@@ -114,8 +113,7 @@ rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE
         grDevices::graphics.off()
         if (length(e$error)) {
           writeLines(c("-1", e$error), .(state_file))
-        }
-        else {
+        } else {
           writeLines("0", .(state_file))
         }
       }, onexit = TRUE)
@@ -169,8 +167,7 @@ rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE
       st <- as.integer(s[[1]])
       if (is.na(st)) {
         st <- -2
-      }
-      else {
+      } else {
         s <- s[-1]
       }
       if (st < 0) {
@@ -178,8 +175,7 @@ rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE
         unlink(state_file)
         attr(st, "rs_exec_error") <- s
         attr(st, "rs_exec_state") <- "Error"
-      }
-      else if (st == 0) {
+      } else if (st == 0) {
         unlink(script)
         unlink(state_file)
         if (file.exists(res_file)) {
@@ -191,8 +187,7 @@ rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE
         if (focus_on_console) {
           rs_focus_console(wait = 0)
         }
-      }
-      else if (st > 0) {
+      } else if (st > 0) {
         attr(st, "rs_exec_state") <- "Running"
       }
       state <<- st
@@ -210,7 +205,7 @@ rs_exec_internal <- function (expr, name = "Untitled", quoted = FALSE, rs = TRUE
   invisible(check_f)
 }
 
-rs_exec <- function (expr, name = "Untitled", quoted = FALSE, rs = FALSE,
+rs_exec <- function(expr, name = "Untitled", quoted = FALSE, rs = FALSE,
                      wait = FALSE, packages = NULL, focus_on_console = FALSE,
                      ..., nested_ok = FALSE)
 {

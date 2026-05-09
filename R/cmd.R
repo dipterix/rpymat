@@ -47,7 +47,7 @@
 NULL
 
 #' @export
-print.rpymat_system_command <- function(x, ...){
+print.rpymat_system_command <- function(x, ...) {
   attrs <- attributes(x)
   cat(glue::glue(
     "{attrs$shell} command:",
@@ -56,10 +56,10 @@ print.rpymat_system_command <- function(x, ...){
     "  glue: {isTRUE(attrs$use_glue)}",
     .sep = "\n"
   ), "\n")
-  if(length(attrs$envs)){
+  if (length(attrs$envs)) {
     cat("Environments:\n")
-    for(k in names(attrs$envs)){
-      if(k != ""){
+    for (k in names(attrs$envs)) {
+      if (k != "") {
         cat(sprintf("  - %s=%s\n", k, attrs$envs[[k]]))
       }
     }
@@ -70,7 +70,7 @@ print.rpymat_system_command <- function(x, ...){
 
 #' @rdname run_command
 #' @export
-cmd_create <- function(command, shell, use_glue = TRUE){
+cmd_create <- function(command, shell, use_glue = TRUE) {
 
   structure(
     paste(command, sep = "\n", collapse = "\n"),
@@ -86,10 +86,10 @@ cmd_create <- function(command, shell, use_glue = TRUE){
 
 #' @rdname run_command
 #' @export
-cmd_set_env <- function(command, key, value, quote = TRUE, quote_type = "cmd"){
+cmd_set_env <- function(command, key, value, quote = TRUE, quote_type = "cmd") {
   stopifnot(inherits(command, "rpymat_system_command"))
   envs <- attr(command, "envs")
-  if(!is.list(envs)){
+  if (!is.list(envs)) {
     envs <- as.list(envs)
   }
   envs[[key]] <- ifelse(quote, shQuote(value, type = quote_type), value)
@@ -99,8 +99,8 @@ cmd_set_env <- function(command, key, value, quote = TRUE, quote_type = "cmd"){
 
 #' @rdname run_command
 #' @export
-cmd_set_workdir <- function(command, workdir){
-  if(!length(workdir) || !dir.exists(workdir)){
+cmd_set_workdir <- function(command, workdir) {
+  if (!length(workdir) || !dir.exists(workdir)) {
     workdir <- getwd()
   }
   workdir <- normalizePath(workdir)
@@ -127,32 +127,32 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
 
   attrs <- attributes(command)
 
-  if(attrs$use_glue){
+  if (attrs$use_glue) {
     command <- glue::glue(command, .envir = .env, ...)
   }
 
   shell <- attrs$shell
-  if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")) {
+  if (shell %in% c("bash", "zsh", "csh", "tcsh", "sh")) {
     s_shell <- sprintf("#!/usr/bin/env %s", shell)
   } else {
     s_shell <- NULL
   }
   s_workdir <- sprintf("cd %s", shQuote(attrs$workdir))
   conda <- attrs$conda
-  if(isTRUE(conda$use_conda)){
-    if(shell %in% c("csh", "tcsh")){
+  if (isTRUE(conda$use_conda)) {
+    if (shell %in% c("csh", "tcsh")) {
       s_conda <- glue::glue(
         # "setenv DYLD_LIBRARY_PATH /opt/X11/lib/flat_namespace",
         'if ( -f "{ conda$conda_path }/etc/profile.d/conda.csh" ) then',
         '  source "{ conda$conda_path }/etc/profile.d/conda.csh"',
-        'else',
+        "else",
         '  setenv PATH "{ conda$conda_path }/bin:$PATH"',
-        'endif',
+        "endif",
         "",
         'conda activate "{ conda$env_path }"',
         .sep = "\n"
       )
-    } else if(shell %in% c("bash", "zsh", "sh")){
+    } else if (shell %in% c("bash", "zsh", "sh")) {
       s_conda <- glue::glue(
         # "export DYLD_LIBRARY_PATH=/opt/X11/lib/flat_namespace",
         # "__conda_setup=\"$('{ conda$conda_path }/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)\"",
@@ -173,13 +173,13 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
     } else {
       bin_path <- file.path(conda$conda_path, "condabin", c("conda", "conda.exe", "conda.bin", "conda.bat"))
       sel <- file.exists(bin_path)
-      if(any(sel)){
+      if (any(sel)) {
         bin_path <- bin_path[sel][[1]]
       } else {
         bin_path <- bin_path[[1]]
       }
       bin_path2 <- normalizePath(bin_path, winslash = "\\", mustWork = FALSE)
-      if(get_os() == "windows"){
+      if (get_os() == "windows") {
         conda_path2 <- normalizePath(file.path(conda$conda_path, "Scripts"), winslash = "\\", mustWork = FALSE)
       } else {
         conda_path2 <- normalizePath(file.path(conda$conda_path, "bin"), winslash = "\\", mustWork = FALSE)
@@ -198,18 +198,18 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
   }
 
   envs <- attrs$envs
-  if(shell %in% c("csh", "tcsh")){
-    s_envs <- unlist(lapply(names(envs), function(env_key){
+  if (shell %in% c("csh", "tcsh")) {
+    s_envs <- unlist(lapply(names(envs), function(env_key) {
       env_val <- envs[[env_key]][[1]]
       sprintf("setenv %s %s", env_key, env_val)
     }))
-  } else if(shell %in% c("cmd")){
-    s_envs <- unlist(lapply(names(envs), function(env_key){
+  } else if (shell %in% c("cmd")) {
+    s_envs <- unlist(lapply(names(envs), function(env_key) {
       env_val <- envs[[env_key]][[1]]
       sprintf("set %s=%s", env_key, env_val)
     }))
   } else {
-    s_envs <- unlist(lapply(names(envs), function(env_key){
+    s_envs <- unlist(lapply(names(envs), function(env_key) {
       env_val <- envs[[env_key]][[1]]
       sprintf("export %s=%s", env_key, env_val)
     }))
@@ -230,31 +230,31 @@ cmd_build <- function(command, .env = parent.frame(), ...) {
 
 #' @rdname run_command
 #' @export
-detect_shell <- function(suggest = NULL){
+detect_shell <- function(suggest = NULL) {
   os <- get_os()
-  if(os == 'windows'){
+  if (os == "windows") {
     re <- c("cmd", "sh")
   } else {
     re <- c("bash", "zsh", "csh", "tcsh", "sh")
   }
-  if(length(suggest)){
+  if (length(suggest)) {
     re0 <- re[re %in% suggest]
-    if(length(re0)){
+    if (length(re0)) {
       re <- re0
     }
   }
   re[[1]]
 }
 
-cmd_run_script <- function(shell, script, wait = TRUE, ...){
-  if(shell %in% c("bash", "zsh", "csh", "tcsh", "sh")){
+cmd_run_script <- function(shell, script, wait = TRUE, ...) {
+  if (shell %in% c("bash", "zsh", "csh", "tcsh", "sh")) {
     system2(command = Sys.which(shell), args = script, ...)
-  } else if(shell %in% "cmd"){
-    if(!endsWith(tolower(script), ".bat")){
+  } else if (shell %in% "cmd") {
+    if (!endsWith(tolower(script), ".bat")) {
       tmpfile <- tempfile(fileext = ".bat")
-      if(wait) {
+      if (wait) {
         on.exit({
-          if(file.exists(tmpfile)){
+          if (file.exists(tmpfile)) {
             try({ unlink(tmpfile) })
           }
         })
@@ -279,13 +279,13 @@ run_command <- function(command, shell = detect_shell(),
                         stdout = "", stderr = "", stdin = "", input = NULL,
                         env_list = list(), wait = TRUE, timeout = 0, ...,
                         workdir = getwd(), dry_run = FALSE, print_cmd = dry_run,
-                        glue_env = parent.frame(), env_name = NA){
+                        glue_env = parent.frame(), env_name = NA) {
 
   shell <- match.arg(shell)
   command <- cmd_create(command, shell, use_glue = use_glue)
-  if(enable_conda){
+  if (enable_conda) {
     conda_bin <- conda_bin()
-    if(length(conda_bin)) {
+    if (length(conda_bin)) {
       conda_path <- normalizePath(dirname(dirname(conda_bin)), winslash = "/")
     } else {
       conda_path <- conda_path()
@@ -294,9 +294,9 @@ run_command <- function(command, shell = detect_shell(),
   }
   command <- cmd_set_workdir(command, workdir)
 
-  if(length(env_list)){
-    for(key in names(env_list)){
-      if(key != ""){
+  if (length(env_list)) {
+    for (key in names(env_list)) {
+      if (key != "") {
         value <- env_list[[key]]
       }
       command <- cmd_set_env(command = command, key = key, value = value, quote = FALSE)
@@ -305,10 +305,10 @@ run_command <- function(command, shell = detect_shell(),
 
 
 
-  if( dry_run ){
+  if ( dry_run ) {
     try({
       cmd <- cmd_build(command = command, .env = glue_env, ...)
-      if(print_cmd){
+      if (print_cmd) {
         message(cmd)
       }
     })
@@ -317,14 +317,14 @@ run_command <- function(command, shell = detect_shell(),
   }
 
   cmd <- cmd_build(command = command, .env = glue_env, ...)
-  if(print_cmd){
+  if (print_cmd) {
     message(cmd)
   }
 
-  tmpfile <- tempfile(pattern = "rpymat_command_", fileext = ifelse(get_os() == 'windows', '.bat', ".sh"))
-  if(wait){
+  tmpfile <- tempfile(pattern = "rpymat_command_", fileext = ifelse(get_os() == "windows", ".bat", ".sh"))
+  if (wait) {
     on.exit({
-      if(file.exists(tmpfile)){
+      if (file.exists(tmpfile)) {
         try({ unlink(tmpfile) })
       }
     })

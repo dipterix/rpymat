@@ -1,14 +1,14 @@
 env_available <- function() {
-  if(!dir.exists(env_path())) { return(FALSE) }
-  if( !conda_is_user_defined() ) {
-    if(! file.exists(conda_bin()) ) { return(FALSE) }
+  if (!dir.exists(env_path())) { return(FALSE) }
+  if ( !conda_is_user_defined() ) {
+    if (! file.exists(conda_bin()) ) { return(FALSE) }
   }
 
   return(TRUE)
 }
 
 module_available <- function( module ) {
-  if(!env_available()) { return(FALSE) }
+  if (!env_available()) { return(FALSE) }
   ensure_rpymat(verbose = FALSE)
   return(reticulate::py_module_available(module))
 }
@@ -47,29 +47,29 @@ read_xlsx <- function(path, sheet = NULL, method = c("auto", "pandas", "readxl")
 
   path <- normalizePath(path, mustWork = TRUE)
 
-  if( method == "auto" ) {
-    if( package_installed("readxl") ) {
+  if ( method == "auto" ) {
+    if ( package_installed("readxl") ) {
       method <- "readxl"
     } else {
       method <- "pandas"
     }
   }
 
-  if(!length(sheet)) {
+  if (!length(sheet)) {
     sheet <- 1L
-  } else if(!is.character(sheet)) {
+  } else if (!is.character(sheet)) {
     sheet <- as.integer(sheet)
   }
-  if(length(sheet) > 1) {
+  if (length(sheet) > 1) {
     stop("`sheet` must have length 1")
   }
 
 
-  if( method == "readxl" ) {
-    if( package_installed("rlang") ) {
+  if ( method == "readxl" ) {
+    if ( package_installed("rlang") ) {
       run_package_function("rlang", "check_installed", "readxl", .on_failure = "warning")
     }
-    if( !package_installed("readxl") ) {
+    if ( !package_installed("readxl") ) {
       stop("Please install package `readxl` first")
     }
     re <- run_package_function(
@@ -89,18 +89,18 @@ read_xlsx <- function(path, sheet = NULL, method = c("auto", "pandas", "readxl")
   pandas_available <- module_available("pandas")
   openpyxl_available <- module_available("openpyxl")
   pkg_add <- c("pandas", "openpyxl")[!c(pandas_available, openpyxl_available)]
-  if(length(pkg_add)) {
+  if (length(pkg_add)) {
     add_packages(packages = pkg_add)
   }
 
   pandas <- import("pandas", convert = FALSE, delay_load = FALSE)
 
-  if(length(n_max) != 1 || !isTRUE(is.numeric(n_max)) ||
+  if (length(n_max) != 1 || !isTRUE(is.numeric(n_max)) ||
      is.na(n_max) || is.infinite(n_max)) {
     n_max <- NULL
   } else {
     n_max <- as.integer(n_max)
-    if(n_max < 0) { n_max <- 0L }
+    if (n_max < 0) { n_max <- 0L }
   }
 
   # python starts from 0
