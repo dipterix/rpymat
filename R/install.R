@@ -612,6 +612,11 @@ ensure_rpymat_internals <- local({
 
       Sys.setenv("RETICULATE_PYTHON" = python_bin)
 
+      # Check if this is mac
+      if (get_os() == "darwin") {
+        Sys.setenv("KMP_DUPLICATE_LIB_OK" = TRUE)
+      }
+
 
       # reticulate::use_condaenv(CONDAENV_NAME(), required = TRUE)
       # reticulate::py_config()
