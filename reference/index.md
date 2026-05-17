@@ -29,6 +29,11 @@
 
   Whether supports customized `'conda'` environment
 
+- [`fix_omp_conflict()`](http://dipterix.org/rpymat/reference/fix_omp_conflict.md)
+  :
+
+  Fix `OpenMP` linking issue
+
 - [`add_jupyter()`](http://dipterix.org/rpymat/reference/jupyter.md)
   [`jupyter_bin()`](http://dipterix.org/rpymat/reference/jupyter.md)
   [`jupyter_register_R()`](http://dipterix.org/rpymat/reference/jupyter.md)
