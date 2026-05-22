@@ -141,9 +141,6 @@ affect your other set ups.
 Since 2014, 'Matlab' has introduced its official compiler for `python`.
 The package `rpymat` provides a simple approach to link the compiler,
 provided that you have proper versions of 'Matlab' installed.
-[Here](https://www.mathworks.com/support/requirements/python-compatibility.html)
-is a list of 'Matlab' versions with official compilers and their
-corresponding `python` versions.
 
 ## Configuration
 
