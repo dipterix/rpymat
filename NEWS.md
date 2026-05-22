@@ -1,3 +1,11 @@
+# rpymat 0.1.9
+
+* Updated `Python` version registry for `MATLAB` 
+* `conda` environment forces to install `pip`
+* Added `libomp` fix: users will no longer encounter the error about double-initializing `OpenMP` by setting `KMP_DUPLICATE_LIB_OK` to `TRUE` as a compromise. However, manually run `fix_omp_conflict` is recommended.
+* Added `fix_omp_conflict` to creates symbolic link on `MacOS` and replace the `conda` built-in version: setting to run manually. This fix requires users to run `fix_omp_conflict` whenever R is updated, and the `OpenMP` `ABI` versions must coincide between R's and `conda`.
+
+
 # rpymat 0.1.8
 
 * Supports multiple environments for incompatible packages

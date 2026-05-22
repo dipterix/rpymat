@@ -142,6 +142,7 @@ jupyter_register_R <- function(user = NULL, name = "ir", displayname = "R", rpro
 }
 
 #' @rdname jupyter
+#' @export
 jupyter_options <- function(
     root_dir, host = "127.0.0.1", port = 8888, open_browser = FALSE,
     token = rand_string(), base_url = "/jupyter/") {

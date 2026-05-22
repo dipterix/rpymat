@@ -39,9 +39,6 @@
 #' Since 2014, 'Matlab' has introduced its official compiler for \code{python}.
 #' The package \code{rpymat} provides a simple approach to link the
 #' compiler, provided that you have proper versions of 'Matlab' installed.
-#' \href{https://www.mathworks.com/support/requirements/python-compatibility.html}{Here} is a list of
-#' 'Matlab' versions with official compilers and their corresponding
-#' \code{python} versions.
 #'
 #' @section Configuration:
 #' If 'Matlab' compiler is not to be installed, In most of the cases,
@@ -275,6 +272,8 @@ mat_pyver <- function(mat_ver) {
 #' @rdname conda-env
 #' @export
 configure_matlab <- function(matlab, python_ver = "auto") {
+
+  # https://www.mathworks.com/support/requirements/python-compatibility.html
 
   # TODO: must configure python first
 
