@@ -2,6 +2,8 @@
 
 ## rpymat 0.1.9
 
+CRAN release: 2026-05-23
+
 - Updated `Python` version registry for `MATLAB`
 - `conda` environment forces to install `pip`
 - Added `libomp` fix: users will no longer encounter the error about

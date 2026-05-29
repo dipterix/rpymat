@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/dipterix/rpymat/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/dipterix/rpymat/blob/v0.1.9/DESCRIPTION)
 
 Wang Z (2026). *rpymat: Easy to Configure an Isolated 'Python'
 Environment*. R package version 0.1.9,
